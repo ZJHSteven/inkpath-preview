@@ -10,5 +10,6 @@
 - 增补 `src/modules/validation/gcodeValidator.ts`，用于在解析之外校验运动指令所需的必填参数。
 - 添加 `src/modules/gcode/samples.ts`，准备预置示例程序，方便默认展示与教学。
 - 实现 `src/hooks/useGCodeDocument.ts`，统一管理 G-code 文本状态与解析结果。
+- 开发 `src/components/editor/GCodeEditor.tsx` 与样式文件，实现 Monaco 编辑器封装、错误标记与播放行号高亮。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
