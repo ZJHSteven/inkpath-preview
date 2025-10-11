@@ -9,7 +9,7 @@ import { useMemo, useState } from 'react'
 
 import { parseGCode } from '../modules/gcode/parser'
 import { DEFAULT_GCODE_SAMPLE } from '../modules/gcode/samples'
-import { GCodeIssue, GCodeProgram } from '../modules/gcode/types'
+import type { GCodeIssue, GCodeProgram } from '../modules/gcode/types'
 import { validateProgram } from '../modules/validation/gcodeValidator'
 
 export interface UseGCodeDocumentOptions {

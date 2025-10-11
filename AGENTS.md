@@ -34,5 +34,6 @@
 - 调整 `src/components/errors/ErrorPanel.tsx` 的类型导入写法。
 - 调整 `src/components/layout/AppLayout.tsx` 的类型导入写法。
 - 调整 `src/components/settings/SimulatorSettingsPanel.tsx` 的类型导入写法。
+- 调整 `src/hooks/useGCodeDocument.ts` 的类型导入写法。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
