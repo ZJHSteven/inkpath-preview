@@ -95,6 +95,12 @@ function App() {
     URL.revokeObjectURL(url)
   }
 
+  const handleClear = () => {
+    setSource('')
+    setManualFocusLine(undefined)
+    controller.stop()
+  }
+
   return (
     <>
       <input
@@ -112,7 +118,7 @@ function App() {
               onChange={setSource}
               issues={allIssues}
               activeLine={activeLine}
-              onRequestClear={() => setSource('')}
+              onRequestClear={handleClear}
               onRequestImport={handleRequestImport}
               onRequestDownload={handleRequestDownload}
             />
