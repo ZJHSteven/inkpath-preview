@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>InkPath Preview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1773cf",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk"]
+            },
+            borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="flex h-screen flex-col">
+<header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-6 py-3 shrink-0">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold text-gray-900 dark:text-white">InkPath Preview</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="#">File</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="#">Edit</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="#">View</a>
+<a class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="#">Help</a>
+</nav>
+<button class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7IBnN7MT5arEJ8UMAyTpG8AtRu_sD2BcTIgE1dM2dbE4O-83vdhAj5DiKqDP3Mol8NFZzYcpE30Z7Q9cntk8joljQLGHaYV5VUdYkfKWX-NaeUVkb1nQohIKIAqbN_hFwihSb0Hv3uH3ylN4colqn_30pndt_2XcUPks3zzYyFyxmOTtfDXZioaQ_AAqpmb1t2lPxTXZPWJzkLd5Dh1Uu3Rml2eqXTZ-0XH1BYp9BRV4Yy4jUBOGVnDn-7wORRU6ZC6FHbFmCgr0");'></div>
+</div>
+</header>
+<main class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 overflow-hidden">
+<div class="flex flex-col gap-6 lg:col-span-1 bg-white/50 dark:bg-black/20 p-4 rounded-lg overflow-y-auto">
+<div class="flex flex-col gap-4 flex-1">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white shrink-0">G-Code Input</h2>
+<div class="relative flex-1">
+<div class="absolute left-0 top-0 bottom-0 w-12 bg-gray-100 dark:bg-gray-800/50 p-2 text-right text-sm text-gray-500 rounded-l">
+                1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>
+<div class="flex items-center gap-1 text-white bg-primary rounded px-1 -mx-1">
+<span class="material-symbols-outlined !text-sm">arrow_forward</span>
+<span>9</span>
+</div>
+                10<br/>11
+              </div>
+<textarea class="form-textarea w-full h-full pl-14 resize-none rounded bg-gray-50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400">G0 X10 Y10
+G1 X20 F500
+G1 Y20
+G1 X10
+G1 Y10
+M2
+; End of program
+G90
+G21 ; Invalid line for demo
+G1 X0 Y0 F1000
+M5</textarea>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white">Paper &amp; Pen Parameters</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="paper-size">Paper Size</label>
+<input class="form-input w-full rounded bg-gray-50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary text-gray-900 dark:text-gray-100" id="paper-size" type="text" value="A4 (210x297mm)"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="pen-width">Pen Width</label>
+<input class="form-input w-full rounded bg-gray-50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary text-gray-900 dark:text-gray-100" id="pen-width" type="text" value="0.5mm"/>
+</div>
+<div class="sm:col-span-2">
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="pen-color">Pen Color</label>
+<div class="relative">
+<input class="form-input w-full rounded bg-gray-50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 focus:ring-primary focus:border-primary text-gray-900 dark:text-gray-100 pl-10" id="pen-color" type="text" value="#1773cf"/>
+<div class="absolute inset-y-0 left-0 flex items-center pl-3">
+<div class="w-4 h-4 rounded-full" style="background-color: #1773cf;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white">Error List</h2>
+<div class="space-y-2">
+<div class="flex items-center gap-3 p-3 rounded bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-300">
+<span class="material-symbols-outlined">error</span>
+<p class="text-sm font-mono">Line 9: Invalid command 'G21'</p>
+</div>
+<div class="flex items-center gap-3 p-3 rounded bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-300">
+<span class="material-symbols-outlined">warning</span>
+<p class="text-sm font-mono">Line 35: Move out of bounds (X150)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 lg:col-span-2">
+<div class="flex flex-col gap-4 bg-white/50 dark:bg-black/20 p-4 rounded-lg flex-1">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white">Canvas Preview</h2>
+<div class="flex-1 w-full bg-cover bg-center rounded-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnKR5kcXkcrKfQpzbVr7BRfVlOvIhPJHvU_8I3BcOtM8qUTV_LoeJX9YzaJuw2FLxUqsRGINkFtEAWMRDJhUzRXERKXKiwVjxN7Lq4mRonPnnNQYS_NHuVtD2kzToK5Ofe1C1Qc1Dy5mLzlGhxc0rJmy_HKnhrq_4smSXy5HHKDqLc4LekLvlfuLwt2zn1-WGGjruo_Z6cNpuGhQhIjO5zmlfeXnakmXhuqj3O9bCRg2ktzXWd-61HMozE4qbJ3_5xljTYa0bW7n4");'></div>
+</div>
+<div class="flex flex-col gap-4 bg-white/50 dark:bg-black/20 p-4 rounded-lg">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white sr-only">Playback Controls</h2>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center gap-2 rounded bg-primary/20 dark:bg-primary/30 text-primary dark:text-white font-semibold p-2.5 hover:bg-primary/30 dark:hover:bg-primary/40">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+<button class="flex items-center justify-center gap-2 rounded bg-gray-200 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 font-semibold p-2.5 hover:bg-gray-300 dark:hover:bg-gray-600/50">
+<span class="material-symbols-outlined">pause</span>
+</button>
+<button class="flex items-center justify-center gap-2 rounded bg-gray-200 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 font-semibold p-2.5 hover:bg-gray-300 dark:hover:bg-gray-600/50">
+<span class="material-symbols-outlined">stop</span>
+</button>
+<div class="flex items-center gap-3 flex-1">
+<input class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary" id="timeline-slider" max="100" min="0" type="range" value="45"/>
+<span class="text-sm font-mono text-gray-600 dark:text-gray-400 w-24 text-right">0:12 / 0:27</span>
+</div>
+<div class="flex items-center gap-2">
+<label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="speed-slider">Speed:</label>
+<span class="text-sm font-mono text-gray-600 dark:text-gray-400">1.0x</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
