@@ -4,7 +4,7 @@
  *  基于生成的时间线检查是否存在越界行为，并输出友好提示。
  */
 
-import {
+import type {
   GCodeIssue,
   SimulationTimeline,
   SimulatorSettings,
