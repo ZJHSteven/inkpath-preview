@@ -5,7 +5,7 @@
  *  具体的业务组件通过 props 注入，保持布局层的纯粹性。
  */
 
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { TopBar } from './TopBar'
 
