@@ -5,7 +5,7 @@
  *  例如检测运动指令缺少坐标、指令是否可执行等。
  */
 
-import { GCodeIssue, GCodeProgram } from '../gcode/types'
+import type { GCodeIssue, GCodeProgram } from '../gcode/types'
 
 const MOTION_COMMANDS = new Set(['G0', 'G00', 'G1', 'G01'])
 
