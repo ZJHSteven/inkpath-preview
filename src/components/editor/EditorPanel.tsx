@@ -5,7 +5,7 @@
  *  具体的逻辑由父组件注入，保持展示层的纯粹性。
  */
 
-import { GCodeIssue } from '../../modules/gcode/types'
+import type { GCodeIssue } from '../../modules/gcode/types'
 
 import { GCodeEditor } from './GCodeEditor'
 

@@ -29,5 +29,6 @@
 - 调整 `src/components/controls/PlaybackControls.tsx` 与样式，使播放相关控件在存在阻断错误或无轨迹时自动禁用。
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的类型导入以兼容 TypeScript verbatimModuleSyntax。
 - 调整 `src/components/controls/PlaybackControls.tsx` 的类型导入写法。
+- 调整 `src/components/editor/EditorPanel.tsx` 的类型导入写法。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
