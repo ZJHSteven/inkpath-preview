@@ -13,5 +13,6 @@
 - 开发 `src/components/editor/GCodeEditor.tsx` 与样式文件，实现 Monaco 编辑器封装、错误标记与播放行号高亮。
 - 编写 `src/components/errors/ErrorPanel.tsx` 及样式，实现中文错误列表展示与快速定位功能。
 - 搭建 `src/components/layout/TopBar.tsx` 与样式，完成顶栏中文界面。
+- 新增 `src/components/layout/AppLayout.tsx`，统一页面网格布局与样式。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
