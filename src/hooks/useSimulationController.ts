@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import {
+import type {
   PlaybackState,
   SimulationSegment,
   SimulationTimeline,
@@ -26,8 +26,7 @@ function interpolatePosition(
   elapsedMs: number,
 ): ToolheadState {
   const segmentDuration = segment.durationMs || 1
-  const segmentStartTime =
-    segment.cumulativeTimeMs - segment.durationMs ?? segment.cumulativeTimeMs
+  const segmentStartTime = segment.cumulativeTimeMs - segment.durationMs
 
   const ratio = Math.min(
     Math.max((elapsedMs - segmentStartTime) / segmentDuration, 0),
@@ -77,13 +76,19 @@ export function useSimulationController(
   useEffect(() => {
     // 每当时间线发生变化（例如重新解析）时，重置播放进度。
     setState(DEFAULT_PLAYBACK_STATE)
-    cancelAnimationFrame(requestRef.current ?? 0)
+    if (requestRef.current !== undefined) {
+      cancelAnimationFrame(requestRef.current)
+      requestRef.current = undefined
+    }
     lastFrameTimeRef.current = null
   }, [timeline])
 
   useEffect(() => {
     if (!state.playing) {
-      cancelAnimationFrame(requestRef.current ?? 0)
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current)
+        requestRef.current = undefined
+      }
       lastFrameTimeRef.current = null
       return
     }
@@ -119,7 +124,10 @@ export function useSimulationController(
     requestRef.current = requestAnimationFrame(frame)
 
     return () => {
-      cancelAnimationFrame(requestRef.current ?? 0)
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current)
+        requestRef.current = undefined
+      }
     }
   }, [state.playing, state.speed, timeline.totalDurationMs])
 
