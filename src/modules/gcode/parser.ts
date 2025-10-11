@@ -6,7 +6,7 @@
  *  不在此阶段做复杂的业务判断。
  */
 
-import {
+import type {
   GCodeCommand,
   GCodeIssue,
   GCodeProgram,
