@@ -8,5 +8,6 @@
 - 新建 `src/modules/gcode/types.ts`，梳理仿真所需的核心类型定义，为后续模块解耦打基础。
 - 编写 `src/modules/gcode/parser.ts`，完成基础的逐行解析与命令、参数抽取逻辑。
 - 增补 `src/modules/validation/gcodeValidator.ts`，用于在解析之外校验运动指令所需的必填参数。
+- 添加 `src/modules/gcode/samples.ts`，准备预置示例程序，方便默认展示与教学。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
