@@ -24,5 +24,6 @@
 - 实现 `src/components/canvas/CanvasPreview.tsx` 及样式，完成画布渲染与进度信息展示。
 - 编写 `src/components/controls/PlaybackControls.tsx`，提供播放速度与进度调节界面。
 - 更新 `src/App.tsx`，整合时间线、画布预览与播放控制，完成基础仿真联动界面。
+- 新建 `src/components/settings/SimulatorSettingsPanel.tsx`，实现纸张/笔参数控制面板。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
