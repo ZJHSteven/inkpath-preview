@@ -4,7 +4,7 @@
  *  定义仿真所需的默认配置与纸张预设，供参数面板与引擎共用。
  */
 
-import { PaperSettings, SimulatorSettings } from '../gcode/types'
+import type { PaperSettings, SimulatorSettings } from '../gcode/types'
 
 export const PAPER_PRESETS: PaperSettings[] = [
   { label: 'A4 (210×297mm)', widthMm: 210, heightMm: 297 },
