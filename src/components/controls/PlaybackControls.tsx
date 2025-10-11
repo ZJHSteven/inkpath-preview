@@ -4,9 +4,12 @@
  *  提供播放、暂停、停止与速度调节等控件，同时展示时间信息。
  */
 
-import { ChangeEvent } from 'react'
+import type { ChangeEvent } from 'react'
 
-import { PlaybackState, SimulationTimeline } from '../../modules/gcode/types'
+import type {
+  PlaybackState,
+  SimulationTimeline,
+} from '../../modules/gcode/types'
 
 import './PlaybackControls.css'
 
