@@ -5,7 +5,7 @@
  *  支持点击定位至对应行，为调试提供便利。
  */
 
-import { GCodeIssue } from '../../modules/gcode/types'
+import type { GCodeIssue } from '../../modules/gcode/types'
 
 import './ErrorPanel.css'
 
