@@ -5,11 +5,11 @@
  *  组件保持“受控”模式，便于外部统一管理文本与解析结果。
  */
 
-import Editor, { Monaco } from '@monaco-editor/react'
+import Editor, { type Monaco } from '@monaco-editor/react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import type { editor } from 'monaco-editor'
 
-import { GCodeIssue } from '../../modules/gcode/types'
+import type { GCodeIssue } from '../../modules/gcode/types'
 
 import './GCodeEditor.css'
 
