@@ -22,5 +22,6 @@
 - 新建 `src/modules/simulation/config.ts`，整理默认纸张与笔设置。
 - 增加 `src/modules/validation/simulationValidator.ts`，用于检测运动轨迹是否越界。
 - 实现 `src/components/canvas/CanvasPreview.tsx` 及样式，完成画布渲染与进度信息展示。
+- 编写 `src/components/controls/PlaybackControls.tsx`，提供播放速度与进度调节界面。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
