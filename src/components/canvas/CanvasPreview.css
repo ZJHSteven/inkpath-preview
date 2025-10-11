@@ -1,0 +1,53 @@
+.canvas-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.canvas-preview__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.canvas-preview__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.canvas-preview__subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.canvas-preview__meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #cbd5f5;
+  background: rgba(59, 130, 246, 0.18);
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+}
+
+.canvas-preview__surface {
+  flex: 1;
+  background: rgba(7, 12, 24, 0.8);
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-preview__surface canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+}

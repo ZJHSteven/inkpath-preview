@@ -21,5 +21,6 @@
 - 编写 `src/hooks/useSimulationController.ts`，封装播放/暂停/拖动等时间线控制逻辑。
 - 新建 `src/modules/simulation/config.ts`，整理默认纸张与笔设置。
 - 增加 `src/modules/validation/simulationValidator.ts`，用于检测运动轨迹是否越界。
+- 实现 `src/components/canvas/CanvasPreview.tsx` 及样式，完成画布渲染与进度信息展示。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
