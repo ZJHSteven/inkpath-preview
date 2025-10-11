@@ -19,24 +19,33 @@ import { buildSimulationTimeline } from './modules/simulation/timeline'
 import { validateSimulationBounds } from './modules/validation/simulationValidator'
 
 function App() {
-  const { source, setSource, program, issues: documentIssues } = useGCodeDocument()
+  const { source, setSource, program, issues: documentIssues } =
+    useGCodeDocument()
   const [settings, setSettings] = useState(DEFAULT_SIMULATOR_SETTINGS)
   const [manualFocusLine, setManualFocusLine] = useState<number | undefined>()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const timeline = useMemo(
+  const rawTimeline = useMemo(
     () => buildSimulationTimeline(program, settings),
     [program, settings],
   )
 
   const boundaryIssues = useMemo(
-    () => validateSimulationBounds(timeline, settings),
-    [timeline, settings],
+    () => validateSimulationBounds(rawTimeline, settings),
+    [rawTimeline, settings],
   )
 
   const allIssues = useMemo(
     () => [...documentIssues, ...boundaryIssues],
     [documentIssues, boundaryIssues],
+  )
+
+  const timeline = useMemo(
+    () => ({
+      ...rawTimeline,
+      playable: allIssues.every((issue) => issue.severity !== 'error'),
+    }),
+    [rawTimeline, allIssues],
   )
 
   const controller = useSimulationController(timeline)

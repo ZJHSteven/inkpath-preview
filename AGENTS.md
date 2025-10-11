@@ -25,6 +25,6 @@
 - 编写 `src/components/controls/PlaybackControls.tsx`，提供播放速度与进度调节界面。
 - 更新 `src/App.tsx`，整合时间线、画布预览与播放控制，完成基础仿真联动界面。
 - 新建 `src/components/settings/SimulatorSettingsPanel.tsx`，实现纸张/笔参数控制面板。
-- 再次扩展 `src/App.tsx`，加入文件导入/导出、参数面板接入、错误跳转联动，并在清空文档时同步停止播放。
+- 再次扩展 `src/App.tsx`，加入文件导入/导出、参数面板接入、错误跳转联动，在清空文档时同步停止播放，并基于错误列表自动禁用播放。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
