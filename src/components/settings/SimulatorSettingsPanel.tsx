@@ -5,13 +5,13 @@
  *  通过受控表单把用户输入同步回父组件。
  */
 
-import { ChangeEvent } from 'react'
+import type { ChangeEvent } from 'react'
 
 import {
   PAPER_PRESETS,
   DEFAULT_SIMULATOR_SETTINGS,
 } from '../../modules/simulation/config'
-import { SimulatorSettings } from '../../modules/gcode/types'
+import type { SimulatorSettings } from '../../modules/gcode/types'
 
 import './SimulatorSettingsPanel.css'
 
