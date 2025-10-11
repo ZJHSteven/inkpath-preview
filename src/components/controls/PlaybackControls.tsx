@@ -47,6 +47,8 @@ export function PlaybackControls({
     onSpeedChange(Number(event.target.value))
   }
 
+  const playable = timeline.playable && timeline.totalDurationMs > 0
+
   return (
     <section className="playback-controls">
       <div className="playback-controls__buttons">
@@ -54,6 +56,7 @@ export function PlaybackControls({
           type="button"
           className="playback-controls__button"
           onClick={state.playing ? onPause : onPlay}
+          disabled={!playable}
         >
           {state.playing ? '暂停' : '播放'}
         </button>
@@ -77,6 +80,7 @@ export function PlaybackControls({
           step={0.001}
           value={progress}
           onChange={handleSliderChange}
+          disabled={!playable}
         />
         <span className="playback-controls__time">
           {formatTime(timeline.totalDurationMs)}
@@ -93,6 +97,7 @@ export function PlaybackControls({
           step={0.1}
           value={state.speed}
           onChange={handleSpeedChange}
+          disabled={!playable}
         />
       </div>
     </section>
