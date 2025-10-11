@@ -1,0 +1,103 @@
+.top-bar {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  backdrop-filter: blur(10px);
+  color: #f8fafc;
+}
+
+.top-bar__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-bar__logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.top-bar__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.top-bar__subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.top-bar__menu {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.top-bar__menu-item {
+  background: transparent;
+  border: none;
+  color: #cbd5f5;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.top-bar__menu-item:hover {
+  background: rgba(59, 130, 246, 0.18);
+  color: #f8fafc;
+}
+
+.top-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar__gear {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.top-bar__gear:hover {
+  transform: rotate(20deg);
+}
+
+.top-bar__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.35);
+  color: #c7d2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
