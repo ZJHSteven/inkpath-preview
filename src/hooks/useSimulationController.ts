@@ -70,24 +70,24 @@ export function useSimulationController(
   timeline: SimulationTimeline,
 ): SimulationController {
   const [state, setState] = useState<PlaybackState>(DEFAULT_PLAYBACK_STATE)
-  const requestRef = useRef<number>()
+  const requestRef = useRef<number | null>(null)
   const lastFrameTimeRef = useRef<number | null>(null)
 
   useEffect(() => {
     // 每当时间线发生变化（例如重新解析）时，重置播放进度。
     setState(DEFAULT_PLAYBACK_STATE)
-    if (requestRef.current !== undefined) {
+    if (requestRef.current !== null) {
       cancelAnimationFrame(requestRef.current)
-      requestRef.current = undefined
+      requestRef.current = null
     }
     lastFrameTimeRef.current = null
   }, [timeline])
 
   useEffect(() => {
     if (!state.playing) {
-      if (requestRef.current !== undefined) {
+      if (requestRef.current !== null) {
         cancelAnimationFrame(requestRef.current)
-        requestRef.current = undefined
+        requestRef.current = null
       }
       lastFrameTimeRef.current = null
       return
@@ -124,9 +124,9 @@ export function useSimulationController(
     requestRef.current = requestAnimationFrame(frame)
 
     return () => {
-      if (requestRef.current !== undefined) {
+      if (requestRef.current !== null) {
         cancelAnimationFrame(requestRef.current)
-        requestRef.current = undefined
+        requestRef.current = null
       }
     }
   }, [state.playing, state.speed, timeline.totalDurationMs])

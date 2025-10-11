@@ -35,7 +35,7 @@
 - 调整 `src/components/layout/AppLayout.tsx` 的类型导入写法。
 - 调整 `src/components/settings/SimulatorSettingsPanel.tsx` 的类型导入写法。
 - 调整 `src/hooks/useGCodeDocument.ts` 的类型导入写法。
-- 调整 `src/hooks/useSimulationController.ts` 的类型导入与定时器清理逻辑，修复 TypeScript 报错。
+- 调整 `src/hooks/useSimulationController.ts` 的类型导入与定时器清理逻辑，修复 TypeScript 报错，并改用 `null` 管理动画句柄。
 - 调整 `src/modules/gcode/parser.ts` 的类型导入写法。
 - 调整 `src/modules/simulation/config.ts` 的类型导入写法。
 - 调整 `src/modules/simulation/timeline.ts` 的类型导入写法。
