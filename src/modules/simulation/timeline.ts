@@ -5,7 +5,7 @@
  *  这里仅负责数学计算，不直接与 React 状态耦合。
  */
 
-import {
+import type {
   GCodeCommand,
   GCodeProgram,
   SimulationSegment,
