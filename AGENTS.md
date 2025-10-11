@@ -19,5 +19,6 @@
 - 改写 `src/App.tsx`，接入左侧编辑器与错误面板，右侧暂以占位内容标识后续任务；同步更新布局样式以支持占位视图。
 - 新增 `src/modules/simulation/timeline.ts`，实现从 G-code 指令生成运动时间线的核心逻辑。
 - 编写 `src/hooks/useSimulationController.ts`，封装播放/暂停/拖动等时间线控制逻辑。
+- 新建 `src/modules/simulation/config.ts`，整理默认纸张与笔设置。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
