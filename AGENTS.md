@@ -41,5 +41,6 @@
 - 调整 `src/modules/simulation/timeline.ts` 的类型导入写法。
 - 调整 `src/modules/validation/gcodeValidator.ts` 的类型导入写法。
 - 调整 `src/modules/validation/simulationValidator.ts` 的类型导入写法。
+- 重写 `README.md`，提供中文功能说明、目录结构与最小使用示例。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。

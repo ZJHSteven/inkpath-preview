@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+# InkPath 预览平台
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个基于 Vite + React + TypeScript 构建的纯前端 G-code 编辑与仿真工具，模拟绘图机执行 G-code 的轨迹，方便在浏览器中完成调试、演示与文件导入导出操作。
 
-Currently, two official plugins are available:
+## 功能亮点
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **中文界面与注释**：所有文案采用中文，对初学者友好。
+- **Monaco 编辑器**：支持语法高亮、错误标记、代码高亮联动以及文件导入/导出。
+- **轨迹仿真**：自动解析 G-code，生成时间轴，展示落笔路径、抬笔虚线以及当前笔尖位置。
+- **播放控制**：提供播放、暂停、停止、拖动进度条、调节播放速度等操作，拖动时同步高亮对应代码行。
+- **参数面板**：可调整纸张尺寸、笔宽、颜色以及落笔判定阈值，并自动检测越界情况。
+- **完全前端化**：无需后端即可部署到 Cloudflare Pages 等静态平台。
 
-## React Compiler
+## 快速上手
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 环境要求
 
-## Expanding the ESLint configuration
+- Node.js ≥ 18
+- npm 或 pnpm（以下命令以 npm 为例）
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 安装依赖
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 开发模式
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+页面默认运行在 <http://localhost:5173/>，保存文件后自动热更新。
+
+### 构建产物
+
+```bash
+npm run build
+```
+
+构建结果输出在 `dist/` 目录，可直接部署至 Cloudflare Pages。
+
+## 使用步骤（最小示例）
+
+1. 启动开发或线上版本后打开页面，左侧编辑区将填充内置示例：
+
+   ```gcode
+   G21        ; 使用毫米单位
+   G90        ; 绝对坐标模式
+   G0 X0 Y0
+   G1 Z-1 F600
+   G1 X40 Y0 F800
+   G1 X40 Y40
+   G1 X0 Y40
+   G1 X0 Y0
+   G1 Z5
+   ```
+
+2. 点击 **播放**，右侧画布会逐步绘制方形轨迹，并显示当前笔尖位置、进度与耗时。
+3. 若拖动底部进度条，编辑器中的对应行会自动高亮并滚动至视野中央。
+4. 可在“纸张与笔设置”面板修改尺寸、笔宽、颜色或落笔阈值，越界问题会在“错误列表”中以警告提示。
+5. 点击 **导入文件** 可选择本地 `.gcode/.nc/.txt` 文件；点击 **下载当前** 可保存编辑后的内容。
+
+## 目录结构概览
+
+```
+src/
+├── components/        # 页面 UI 组件
+│   ├── canvas/        # 画布预览
+│   ├── controls/      # 播放控件
+│   ├── editor/        # G-code 编辑器
+│   ├── errors/        # 错误列表
+│   ├── layout/        # 布局相关组件
+│   └── settings/      # 参数设置面板
+├── hooks/             # 自定义 Hook（文档管理、仿真控制等）
+├── modules/           # 解析、仿真、校验等纯逻辑模块
+│   ├── gcode/         # 类型定义、解析器及示例
+│   ├── simulation/    # 时间线生成与默认配置
+│   └── validation/    # 各类校验逻辑
+└── App.tsx            # 应用入口，负责各模块的组装
+```
+
+## 设计约定
+
+- **模块化与注释**：核心逻辑拆分在 `modules/` 目录，组件文件均附带中文注释，方便学习与维护。
+- **错误处理统一**：解析阶段与仿真阶段分别汇总错误信息，最终集中展示在“错误列表”中，严重错误会自动禁用播放。
+- **可扩展性**：如需支持更多 G-code 指令、增加 3D 视角或接入真实硬件，可在现有模块基础上扩展。
+
+## 部署建议
+
+1. 执行 `npm run build` 生成 `dist/`。
+2. 在 Cloudflare Pages 控制台创建项目，指定构建输出目录为 `dist`，构建命令为 `npm run build`。
+3. 部署完成后即可通过浏览器直接访问。
+
+如需接入真实设备，可在此基础上增加串口或网络通信层，但前端教学与演示场景已经可以覆盖。
