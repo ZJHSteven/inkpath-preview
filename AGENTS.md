@@ -16,5 +16,6 @@
 - 新增 `src/components/layout/AppLayout.tsx`，统一页面网格布局与样式。
 - 重写 `src/index.css`，设定全局暗色主题与基础排版变量。
 - 创建 `src/components/editor/EditorPanel.tsx`，整合编辑器工具条与 Monaco 视图。
+- 改写 `src/App.tsx`，接入左侧编辑器与错误面板，右侧暂以占位内容标识后续任务；同步更新布局样式以支持占位视图。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
