@@ -72,6 +72,8 @@ export function useSimulationController(
   const [state, setState] = useState<PlaybackState>(DEFAULT_PLAYBACK_STATE)
   const requestRef = useRef<number | null>(null)
   const lastFrameTimeRef = useRef<number | null>(null)
+  const stateRef = useRef<PlaybackState>(DEFAULT_PLAYBACK_STATE)
+  const elapsedRef = useRef(0)
 
   useEffect(() => {
     // 每当时间线发生变化（例如重新解析）时，重置播放进度。
@@ -81,7 +83,14 @@ export function useSimulationController(
       requestRef.current = null
     }
     lastFrameTimeRef.current = null
+    stateRef.current = DEFAULT_PLAYBACK_STATE
+    elapsedRef.current = 0
   }, [timeline])
+
+  useEffect(() => {
+    stateRef.current = state
+    elapsedRef.current = state.elapsedMs
+  }, [state])
 
   useEffect(() => {
     if (!state.playing) {
@@ -93,41 +102,64 @@ export function useSimulationController(
       return
     }
 
-    const frame = (timestamp: number) => {
-      setState((prev) => {
-        if (!prev.playing) {
-          return prev
+    const step = (timestamp: number) => {
+      if (!stateRef.current.playing) {
+        requestRef.current = null
+        return
+      }
+
+      const last = lastFrameTimeRef.current ?? timestamp
+      const delta = (timestamp - last) * stateRef.current.speed
+      lastFrameTimeRef.current = timestamp
+
+      const totalDuration = timeline.totalDurationMs
+      if (totalDuration <= 0) {
+        const nextState: PlaybackState = {
+          ...stateRef.current,
+          playing: false,
+          elapsedMs: 0,
+          pendingSeekMs: null,
         }
+        stateRef.current = nextState
+        elapsedRef.current = 0
+        setState(nextState)
+        requestRef.current = null
+        return
+      }
 
-        const last = lastFrameTimeRef.current ?? timestamp
-        const delta = (timestamp - last) * prev.speed
-        lastFrameTimeRef.current = timestamp
+      const nextElapsed = Math.min(
+        elapsedRef.current + delta,
+        totalDuration,
+      )
+      const reachedEnd = nextElapsed >= totalDuration
 
-        const nextElapsed = Math.min(
-          prev.elapsedMs + delta,
-          timeline.totalDurationMs,
-        )
-
-        const playing =
-          nextElapsed >= timeline.totalDurationMs ? false : prev.playing
-
-        return {
-          ...prev,
+      if (nextElapsed !== elapsedRef.current || reachedEnd) {
+        elapsedRef.current = nextElapsed
+        const nextState: PlaybackState = {
+          ...stateRef.current,
           elapsedMs: nextElapsed,
-          playing,
+          playing: reachedEnd ? false : stateRef.current.playing,
+          pendingSeekMs: null,
         }
-      })
+        stateRef.current = nextState
+        setState(nextState)
+      }
 
-      requestRef.current = requestAnimationFrame(frame)
+      if (!reachedEnd && stateRef.current.playing) {
+        requestRef.current = requestAnimationFrame(step)
+      } else {
+        requestRef.current = null
+      }
     }
 
-    requestRef.current = requestAnimationFrame(frame)
+    requestRef.current = requestAnimationFrame(step)
 
     return () => {
       if (requestRef.current !== null) {
         cancelAnimationFrame(requestRef.current)
         requestRef.current = null
       }
+      lastFrameTimeRef.current = null
     }
   }, [state.playing, state.speed, timeline.totalDurationMs])
 
@@ -135,42 +167,81 @@ export function useSimulationController(
     if (!timeline.playable || timeline.totalDurationMs === 0) {
       return
     }
-    setState((prev) => ({
-      ...prev,
-      playing: true,
-      pendingSeekMs: null,
-    }))
+    lastFrameTimeRef.current = null
+    setState((prev) => {
+      if (prev.playing) {
+        return prev
+      }
+      const resetElapsed =
+        prev.elapsedMs >= timeline.totalDurationMs ? 0 : prev.elapsedMs
+      elapsedRef.current = resetElapsed
+      const nextState: PlaybackState = {
+        ...prev,
+        playing: true,
+        elapsedMs: resetElapsed,
+        pendingSeekMs: null,
+      }
+      stateRef.current = nextState
+      return nextState
+    })
   }
 
   const pause = () => {
-    setState((prev) => ({
-      ...prev,
-      playing: false,
-    }))
+    setState((prev) => {
+      if (!prev.playing) {
+        return prev
+      }
+      const nextState: PlaybackState = {
+        ...prev,
+        playing: false,
+      }
+      stateRef.current = nextState
+      return nextState
+    })
   }
 
   const stop = () => {
-    setState({
-      ...DEFAULT_PLAYBACK_STATE,
-    })
+    if (requestRef.current !== null) {
+      cancelAnimationFrame(requestRef.current)
+      requestRef.current = null
+    }
+    lastFrameTimeRef.current = null
+    elapsedRef.current = 0
+    const nextState: PlaybackState = { ...DEFAULT_PLAYBACK_STATE }
+    stateRef.current = nextState
+    setState(nextState)
   }
 
   const seek = (ratio: number) => {
     const clampedRatio = Math.min(Math.max(ratio, 0), 1)
     const targetMs = timeline.totalDurationMs * clampedRatio
-    setState((prev) => ({
-      ...prev,
-      elapsedMs: targetMs,
-      pendingSeekMs: targetMs,
-      playing: false,
-    }))
+    elapsedRef.current = targetMs
+    lastFrameTimeRef.current = null
+    setState((prev) => {
+      const nextState: PlaybackState = {
+        ...prev,
+        elapsedMs: targetMs,
+        pendingSeekMs: targetMs,
+        playing: false,
+      }
+      stateRef.current = nextState
+      return nextState
+    })
   }
 
   const setSpeed = (speed: number) => {
-    setState((prev) => ({
-      ...prev,
-      speed: Math.max(speed, 0.1),
-    }))
+    const normalized = Math.max(speed, 0.1)
+    setState((prev) => {
+      if (prev.speed === normalized) {
+        return prev
+      }
+      const nextState: PlaybackState = {
+        ...prev,
+        speed: normalized,
+      }
+      stateRef.current = nextState
+      return nextState
+    })
   }
 
   const currentSegment = useMemo(
