@@ -6,6 +6,7 @@
  */
 
 import type { SVGProps } from 'react'
+import { Settings as LucideSettings } from 'lucide-react' // 引入 Lucide 开源图标库，确保图形一致性与可维护性。
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   /** 为屏幕阅读器提供的短语，默认隐藏图标进入无障碍树。 */
@@ -20,21 +21,12 @@ function createAccessibleProps(label?: string) {
 
 export function GearIcon({ label, ...rest }: IconProps) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width={20}
-      height={20}
-      fill="none"
-      stroke="currentColor"
+    <LucideSettings
+      size={20}
       strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
       {...createAccessibleProps(label)}
       {...rest}
-    >
-      <circle cx={12} cy={12} r={3.5} />
-      <path d="M4.9 9.8a1 1 0 0 1 .2-1.1l1.3-1.3a1 1 0 0 1 1.1-.2l1.6.6a1 1 0 0 0 1.2-.5l.5-1.6A1 1 0 0 1 12 5h0a1 1 0 0 1 1.1.7l.5 1.6a1 1 0 0 0 1.2.5l1.6-.6a1 1 0 0 1 1.1.2l1.3 1.3a1 1 0 0 1 .2 1.1l-.6 1.6a1 1 0 0 0 .5 1.2l1.6.5a1 1 0 0 1 .7 1.1v1.8a1 1 0 0 1-.7 1.1l-1.6.5a1 1 0 0 0-.5 1.2l.6 1.6a1 1 0 0 1-.2 1.1l-1.3 1.3a1 1 0 0 1-1.1.2l-1.6-.6a1 1 0 0 0-1.2.5l-.5 1.6A1 1 0 0 1 12 21h0a1 1 0 0 1-1.1-.7l-.5-1.6a1 1 0 0 0-1.2-.5l-1.6.6a1 1 0 0 1-1.1-.2L5.2 18.3a1 1 0 0 1-.2-1.1l.6-1.6a1 1 0 0 0-.5-1.2l-1.6-.5a1 1 0 0 1-.7-1.1v-1.8a1 1 0 0 1 .7-1.1l1.6-.5a1 1 0 0 0 .5-1.2Z" />
-    </svg>
+    />
   )
 }
 

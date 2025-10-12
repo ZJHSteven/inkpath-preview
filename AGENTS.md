@@ -4,6 +4,7 @@
 
 ## 2025-10-12
 
+- 引入 `lucide-react` 并改写 `src/components/icons/ControlIcons.tsx` 的齿轮图标实现，统一复用图标库以避免手绘 SVG 角度不规整。
 - 修复 `src/App.tsx` 遗漏的 `App.css` 引入，恢复隐藏文件输入的辅助样式避免“浏览文件”按钮外露。
 - 调整 `src/App.tsx` 隐藏文件输入为屏幕阅读器友好的写法，解决无标签告警并抽离样式至 `src/App.css`。
 - 优化 `src/components/settings/SimulatorSettingsPanel.css` 数字输入配色并新增自定义纸张尺寸表单，支持宽高输入与提示文本。
