@@ -176,8 +176,9 @@
   transform: rotate(8deg);
 }
 
-.top-bar__gear .material-symbols-rounded {
-  font-size: 22px;
+.top-bar__gear svg {
+  width: 20px;
+  height: 20px;
 }
 
 .top-bar__avatar {

@@ -8,6 +8,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import './TopBar.css'
+import { GearIcon } from '../icons/ControlIcons'
 
 type MenuKey = 'file' | 'edit' | 'view' | 'help' | 'settings' | 'profile' | null
 
@@ -189,9 +190,12 @@ export function TopBar({
       <button
         type="button"
         className={`top-bar__gear ${openMenu === 'settings' ? 'top-bar__gear--active' : ''}`}
+        aria-label="打开快捷设置菜单"
+        aria-haspopup="true"
+        aria-expanded={openMenu === 'settings'}
         onClick={() => setOpenMenu(openMenu === 'settings' ? null : 'settings')}
       >
-        <span className="material-symbols-rounded">tune</span>
+        <GearIcon />
       </button>
       {openMenu === 'settings' ? (
         <div className="top-bar__dropdown top-bar__dropdown--right">
