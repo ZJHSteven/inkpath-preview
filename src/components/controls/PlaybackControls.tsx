@@ -91,6 +91,7 @@ export function PlaybackControls({
           value={progress}
           onChange={handleSliderChange}
           disabled={!playable}
+          aria-label="播放进度"
         />
         <span className="playback-controls__time">
           {formatTime(timeline.totalDurationMs)}
