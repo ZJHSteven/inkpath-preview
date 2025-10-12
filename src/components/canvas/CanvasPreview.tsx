@@ -30,29 +30,6 @@ interface CanvasSize {
 }
 
 const PAPER_PADDING = 32
-const PAPER_CORNER_RADIUS = 16
-
-function drawRoundedRect(
-  context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  radius: number,
-) {
-  const r = Math.min(radius, width / 2, height / 2)
-  context.beginPath()
-  context.moveTo(x + r, y)
-  context.lineTo(x + width - r, y)
-  context.quadraticCurveTo(x + width, y, x + width, y + r)
-  context.lineTo(x + width, y + height - r)
-  context.quadraticCurveTo(x + width, y + height, x + width - r, y + height)
-  context.lineTo(x + r, y + height)
-  context.quadraticCurveTo(x, y + height, x, y + height - r)
-  context.lineTo(x, y + r)
-  context.quadraticCurveTo(x, y, x + r, y)
-  context.closePath()
-}
 
 function formatTime(ms: number): string {
   if (ms <= 0) {
@@ -141,16 +118,19 @@ export function CanvasPreview({
     context.fillStyle = '#f8fafc'
     context.strokeStyle = 'rgba(148, 163, 184, 0.6)'
     context.lineWidth = 1
-    drawRoundedRect(
-      context,
+    // 绘制直角纸张，模拟真实纸张边缘而非视觉装饰。
+    context.fillRect(
       offsetX,
       offsetY,
       paper.widthMm * scale,
       paper.heightMm * scale,
-      PAPER_CORNER_RADIUS,
     )
-    context.fill()
-    context.stroke()
+    context.strokeRect(
+      offsetX,
+      offsetY,
+      paper.widthMm * scale,
+      paper.heightMm * scale,
+    )
 
     if (showGrid) {
       context.strokeStyle = 'rgba(148, 163, 184, 0.12)'

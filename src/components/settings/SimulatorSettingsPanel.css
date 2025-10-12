@@ -49,6 +49,27 @@
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
+/* 使用提示文本告知当前自定义尺寸的具体字符描述，便于与画布呈现保持一致。 */
+.settings-panel__hint {
+  margin-left: 8px;
+  font-size: 11px;
+  color: #7c8ca6;
+}
+
+.settings-panel__custom-size {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-panel__custom-size-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
 /* Safari 等 WebKit 内核浏览器依旧会保留亮色箭头，这里通过滤镜压暗亮度。 */
 .settings-panel__field input[type='number']::-webkit-inner-spin-button,
 .settings-panel__field input[type='number']::-webkit-outer-spin-button {

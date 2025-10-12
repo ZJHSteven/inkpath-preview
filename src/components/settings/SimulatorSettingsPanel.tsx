@@ -15,6 +15,16 @@ import type { SimulatorSettings } from '../../modules/gcode/types'
 
 import './SimulatorSettingsPanel.css'
 
+const CUSTOM_OPTION_VALUE = '__custom__'
+
+function formatNumberForLabel(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '')
+}
+
+function formatCustomLabel(widthMm: number, heightMm: number): string {
+  return `自定义 (${formatNumberForLabel(widthMm)}×${formatNumberForLabel(heightMm)}mm)`
+}
+
 export interface SimulatorSettingsPanelProps {
   settings: SimulatorSettings
   onChange: (next: SimulatorSettings) => void
@@ -32,10 +42,32 @@ export function SimulatorSettingsPanel({
   settings,
   onChange,
 }: SimulatorSettingsPanelProps) {
+  const isCustomPaper = !PAPER_PRESETS.some(
+    (item) =>
+      item.label === settings.paper.label &&
+      item.widthMm === settings.paper.widthMm &&
+      item.heightMm === settings.paper.heightMm,
+  )
+
   const handlePaperChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const preset = PAPER_PRESETS.find(
-      (item) => item.label === event.target.value,
-    )
+    const { value } = event.target
+    if (value === CUSTOM_OPTION_VALUE) {
+      const nextPaper = {
+        widthMm: settings.paper.widthMm,
+        heightMm: settings.paper.heightMm,
+        label: formatCustomLabel(
+          settings.paper.widthMm,
+          settings.paper.heightMm,
+        ),
+      }
+      onChange({
+        ...settings,
+        paper: nextPaper,
+      })
+      return
+    }
+
+    const preset = PAPER_PRESETS.find((item) => item.label === value)
     onChange({
       ...settings,
       paper: preset ?? DEFAULT_SIMULATOR_SETTINGS.paper,
@@ -65,6 +97,29 @@ export function SimulatorSettingsPanel({
     })
   }
 
+  const updateCustomPaper = (nextWidth: number, nextHeight: number) => {
+    const safeWidth = Math.max(nextWidth, 10)
+    const safeHeight = Math.max(nextHeight, 10)
+    onChange({
+      ...settings,
+      paper: {
+        widthMm: safeWidth,
+        heightMm: safeHeight,
+        label: formatCustomLabel(safeWidth, safeHeight),
+      },
+    })
+  }
+
+  const handleCustomWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextWidth = handleNumberInput(event, settings.paper.widthMm)
+    updateCustomPaper(nextWidth, settings.paper.heightMm)
+  }
+
+  const handleCustomHeightChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextHeight = handleNumberInput(event, settings.paper.heightMm)
+    updateCustomPaper(settings.paper.widthMm, nextHeight)
+  }
+
   return (
     <section className="settings-panel">
       <h2 className="settings-panel__title">纸张与笔设置</h2>
@@ -73,14 +128,52 @@ export function SimulatorSettingsPanel({
       </p>
       <label className="settings-panel__field">
         <span>纸张尺寸</span>
-        <select value={settings.paper.label} onChange={handlePaperChange}>
+        <select
+          value={isCustomPaper ? CUSTOM_OPTION_VALUE : settings.paper.label}
+          onChange={handlePaperChange}
+        >
           {PAPER_PRESETS.map((preset) => (
             <option key={preset.label} value={preset.label}>
               {preset.label}
             </option>
           ))}
+          <option value={CUSTOM_OPTION_VALUE}>自定义尺寸</option>
         </select>
       </label>
+      <div className="settings-panel__field">
+        <span>
+          自定义尺寸 (mm)
+          <small className="settings-panel__hint">
+            当前显示：{settings.paper.label}
+          </small>
+        </span>
+        <div className="settings-panel__custom-size">
+          <label className="settings-panel__custom-size-item">
+            <span>宽度</span>
+            <input
+              type="number"
+              min={10}
+              max={1000}
+              step={1}
+              value={settings.paper.widthMm}
+              onChange={handleCustomWidthChange}
+              disabled={!isCustomPaper}
+            />
+          </label>
+          <label className="settings-panel__custom-size-item">
+            <span>高度</span>
+            <input
+              type="number"
+              min={10}
+              max={1000}
+              step={1}
+              value={settings.paper.heightMm}
+              onChange={handleCustomHeightChange}
+              disabled={!isCustomPaper}
+            />
+          </label>
+        </div>
+      </div>
       <label className="settings-panel__field">
         <span>笔宽 (mm)</span>
         <input
