@@ -43,5 +43,6 @@
 - 调整 `src/modules/validation/simulationValidator.ts` 的类型导入写法。
 - 重写 `README.md`，提供中文功能说明、目录结构与最小使用示例。
 - 优化 `src/components/layout/AppLayout.css`，确保桌面端维持左右双栏布局并调整背景风格。
+- 重构 `src/components/layout/TopBar.tsx` 与 `.css`，恢复原版 logo，并为“文件/编辑/视图/帮助/设置/访客”提供可用菜单与功能入口。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
