@@ -19,6 +19,7 @@ import { buildSimulationTimeline } from './modules/simulation/timeline'
 import { validateSimulationBounds } from './modules/validation/simulationValidator'
 import { DEFAULT_GCODE_SAMPLE } from './modules/gcode/samples'
 import { TopBar } from './components/layout/TopBar'
+import './App.css' // 引入应用级样式，包含模态层与隐藏文件输入的无障碍写法。
 
 function App() {
   const { source, setSource, program, issues: documentIssues } =
