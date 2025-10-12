@@ -44,5 +44,7 @@
 - 重写 `README.md`，提供中文功能说明、目录结构与最小使用示例。
 - 优化 `src/components/layout/AppLayout.css`，确保桌面端维持左右双栏布局并调整背景风格。
 - 重构 `src/components/layout/TopBar.tsx` 与 `.css`，恢复原版 logo，并为“文件/编辑/视图/帮助/设置/访客”提供可用菜单与功能入口。
+- 精简 `src/components/editor/EditorPanel.tsx` 与样式，改由顶栏菜单负责导入/下载等操作，并新增编辑器自动换行开关。
+- `src/components/editor/GCodeEditor.tsx` 支持通过 props 控制自动换行。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。

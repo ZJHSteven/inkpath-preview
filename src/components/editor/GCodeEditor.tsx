@@ -22,6 +22,8 @@ export interface GCodeEditorProps {
   issues: GCodeIssue[]
   /** 当前播放到的行号，便于高亮展示。 */
   activeLine?: number
+  /** 是否启用自动换行，用于配合菜单开关。 */
+  wordWrapEnabled: boolean
 }
 
 const HIGHLIGHT_DECORATION_OPTIONS: editor.IModelDecorationOptions = {
@@ -148,6 +150,7 @@ export function GCodeEditor({
   onChange,
   issues,
   activeLine,
+  wordWrapEnabled,
 }: GCodeEditorProps) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
   const monacoRef = useRef<Monaco | null>(null)
@@ -173,13 +176,13 @@ export function GCodeEditor({
       lineNumbers: 'on',
       glyphMargin: true,
       scrollBeyondLastLine: false,
-      wordWrap: 'on',
+      wordWrap: wordWrapEnabled ? 'on' : 'off',
       smoothScrolling: true,
       renderLineHighlight: 'none',
       padding: { top: 12, bottom: 12 },
       dragAndDrop: true,
     }),
-    [],
+    [wordWrapEnabled],
   )
 
   return (
