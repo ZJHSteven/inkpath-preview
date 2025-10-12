@@ -47,5 +47,6 @@
 - 精简 `src/components/editor/EditorPanel.tsx` 与样式，改由顶栏菜单负责导入/下载等操作，并新增编辑器自动换行开关。
 - `src/components/editor/GCodeEditor.tsx` 支持通过 props 控制自动换行。
 - `src/components/canvas/CanvasPreview.tsx` 新增网格/抬笔轨迹开关支持，与顶栏设置联动。
+- 调整 `src/components/layout/AppLayout.tsx`，改由父组件传入顶栏节点以便注入交互逻辑。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。

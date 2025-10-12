@@ -7,20 +7,19 @@
 
 import type { ReactNode } from 'react'
 
-import { TopBar } from './TopBar'
-
 import './AppLayout.css'
 
 export interface AppLayoutProps {
+  topBar: ReactNode
   sidebar: ReactNode
   main: ReactNode
   footer?: ReactNode
 }
 
-export function AppLayout({ sidebar, main, footer }: AppLayoutProps) {
+export function AppLayout({ topBar, sidebar, main, footer }: AppLayoutProps) {
   return (
     <div className="app-layout">
-      <TopBar />
+      {topBar}
       <div className="app-layout__content">
         <aside className="app-layout__sidebar">{sidebar}</aside>
         <section className="app-layout__main">{main}</section>
