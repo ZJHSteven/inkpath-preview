@@ -146,7 +146,10 @@ function App() {
         type="file"
         accept=".gcode,.nc,.txt"
         ref={fileInputRef}
-        style={{ display: 'none' }}
+        className="app__file-input"
+        aria-label="导入 G-code 文件"
+        aria-hidden="true"
+        tabIndex={-1}
         onChange={handleFileChange}
       />
       <AppLayout

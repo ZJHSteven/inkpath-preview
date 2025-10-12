@@ -64,3 +64,16 @@
   background: rgba(59, 130, 246, 0.3);
   transform: translateY(-1px);
 }
+
+/* 采用屏幕阅读器友好写法隐藏原生文件选择输入，只保留可访问性树中的文本描述。 */
+.app__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
