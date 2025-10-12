@@ -48,5 +48,7 @@
 - `src/components/editor/GCodeEditor.tsx` 支持通过 props 控制自动换行。
 - `src/components/canvas/CanvasPreview.tsx` 新增网格/抬笔轨迹开关支持，与顶栏设置联动。
 - 调整 `src/components/layout/AppLayout.tsx`，改由父组件传入顶栏节点以便注入交互逻辑。
+- 大幅改写 `src/App.tsx`，整合顶栏菜单回调、网格/抬笔开关、自动换行控制以及帮助/关于弹层。
+- 新建全局样式 `src/App.css`，用于弹层与根节点排版。
 
 > 维护提示：后续每次提交前，请追加当日操作条目，保持时间倒序，便于他人快速了解进度。
