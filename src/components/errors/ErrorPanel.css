@@ -43,7 +43,13 @@
   gap: 8px;
   max-height: 220px;
   overflow-y: auto;
-  scrollbar-width: thin;
+}
+
+/* 使用 @supports 避免在不支持的浏览器中触发兼容性警告，同时在支持时保持细滚动条。 */
+@supports (scrollbar-width: thin) {
+  .error-panel__list {
+    scrollbar-width: thin;
+  }
 }
 
 .error-panel__item {
