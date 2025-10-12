@@ -20,6 +20,8 @@ export interface CanvasPreviewProps {
   progress: number
   position: ToolheadState
   settings: SimulatorSettings
+  showGrid: boolean
+  showPenUpTrails: boolean
 }
 
 interface CanvasSize {
@@ -67,6 +69,8 @@ export function CanvasPreview({
   progress,
   position,
   settings,
+  showGrid,
+  showPenUpTrails,
 }: CanvasPreviewProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -148,21 +152,22 @@ export function CanvasPreview({
     context.fill()
     context.stroke()
 
-    // 绘制网格（每 10mm）
-    context.strokeStyle = 'rgba(148, 163, 184, 0.15)'
-    context.lineWidth = 1
-    context.beginPath()
-    for (let x = 0; x <= paper.widthMm; x += 10) {
-      const px = mapX(x)
-      context.moveTo(px, offsetY)
-      context.lineTo(px, offsetY + paper.heightMm * scale)
+    if (showGrid) {
+      context.strokeStyle = 'rgba(148, 163, 184, 0.12)'
+      context.lineWidth = 1
+      context.beginPath()
+      for (let x = 0; x <= paper.widthMm; x += 10) {
+        const px = mapX(x)
+        context.moveTo(px, offsetY)
+        context.lineTo(px, offsetY + paper.heightMm * scale)
+      }
+      for (let y = 0; y <= paper.heightMm; y += 10) {
+        const py = mapY(y)
+        context.moveTo(offsetX, py)
+        context.lineTo(offsetX + paper.widthMm * scale, py)
+      }
+      context.stroke()
     }
-    for (let y = 0; y <= paper.heightMm; y += 10) {
-      const py = mapY(y)
-      context.moveTo(offsetX, py)
-      context.lineTo(offsetX + paper.widthMm * scale, py)
-    }
-    context.stroke()
 
     // 绘制轨迹
     const penWidthPx = Math.max((penWidthMm || 0.5) * scale, 1)
@@ -176,7 +181,7 @@ export function CanvasPreview({
 
       if (!segment.penDown) {
         // 抬笔路径使用虚线，仅在完全播放后显示以示参考
-        if (playedMs >= endTime) {
+        if (showPenUpTrails && playedMs >= endTime) {
           context.setLineDash([8, 8])
           context.strokeStyle = 'rgba(148, 163, 184, 0.35)'
           context.lineWidth = 1
@@ -219,7 +224,7 @@ export function CanvasPreview({
     context.beginPath()
     context.arc(mapX(position.x), mapY(position.y), penWidthPx * 1.8, 0, Math.PI * 2)
     context.fill()
-  }, [canvasSize, settings, timeline, playedMs, position])
+  }, [canvasSize, settings, timeline, playedMs, position, showGrid, showPenUpTrails])
 
   return (
     <div className="canvas-preview">
