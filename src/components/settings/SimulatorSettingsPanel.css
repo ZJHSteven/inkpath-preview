@@ -39,10 +39,18 @@
   padding: 8px 12px;
   font-size: 13px;
   outline: none;
+  /* color-scheme 能够让浏览器自带的上下箭头等部件跟随深色主题配色，避免默认纯白视觉突兀。 */
+  color-scheme: dark;
 }
 
 .settings-panel__field input:focus,
 .settings-panel__field select:focus {
   border-color: rgba(59, 130, 246, 0.6);
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+/* Safari 等 WebKit 内核浏览器依旧会保留亮色箭头，这里通过滤镜压暗亮度。 */
+.settings-panel__field input[type='number']::-webkit-inner-spin-button,
+.settings-panel__field input[type='number']::-webkit-outer-spin-button {
+  filter: invert(70%);
 }
