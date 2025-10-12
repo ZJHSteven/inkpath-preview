@@ -15,8 +15,14 @@
 }
 
 .playback-controls__button {
-  padding: 10px 16px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
   border-radius: 10px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(59, 130, 246, 0.18);
   color: #bfdbfe;
   border: 1px solid rgba(59, 130, 246, 0.35);
@@ -72,4 +78,17 @@
 
 .playback-controls__speed input[type='range']:disabled {
   opacity: 0.4;
+}
+
+/* 隐藏按钮中的文本，仅用于屏幕阅读器提示。 */
+.playback-controls__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

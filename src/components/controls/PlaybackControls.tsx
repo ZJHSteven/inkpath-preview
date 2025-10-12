@@ -12,6 +12,7 @@ import type {
 } from '../../modules/gcode/types'
 
 import './PlaybackControls.css'
+import { PauseIcon, PlayIcon, StopIcon } from '../icons/ControlIcons'
 
 export interface PlaybackControlsProps {
   state: PlaybackState
@@ -60,15 +61,21 @@ export function PlaybackControls({
           className="playback-controls__button"
           onClick={state.playing ? onPause : onPlay}
           disabled={!playable}
+          aria-label={state.playing ? '暂停播放' : '开始播放'}
         >
-          {state.playing ? '暂停' : '播放'}
+          {state.playing ? <PauseIcon /> : <PlayIcon />}
+          <span className="playback-controls__sr-only">
+            {state.playing ? '暂停播放' : '开始播放'}
+          </span>
         </button>
         <button
           type="button"
           className="playback-controls__button"
           onClick={onStop}
+          aria-label="停止播放"
         >
-          停止
+          <StopIcon />
+          <span className="playback-controls__sr-only">停止播放</span>
         </button>
       </div>
 
