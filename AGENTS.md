@@ -1,5 +1,17 @@
 # 代理工作日志
 
+# 代理工作日志
+
+## 2025-10-12
+
+- 调整 `src/App.tsx` 隐藏文件输入为屏幕阅读器友好的写法，解决无标签告警并抽离样式至 `src/App.css`。
+- 优化 `src/components/settings/SimulatorSettingsPanel.css` 数字输入配色并新增自定义纸张尺寸表单，支持宽高输入与提示文本。
+- 以 `@supports` 包裹错误面板滚动条样式，规避浏览器兼容性警告。
+- 重写 `useSimulationController` 播放循环，避免播放按钮无响应并保持进度同步。
+- 新增 `src/components/icons/ControlIcons.tsx` 汇总控制按钮 SVG 图标，顶栏设置按钮改用齿轮图标并添加 ARIA 属性。
+- 播放控制条改用图标按钮并保留屏幕阅读器提示文本，统一按钮尺寸。
+- 画布纸张改为直角矩形，以贴近真实纸面效果。
+
 ## 2025-10-11
 
 - 初始化 Git 仓库，记录现有 Vite + React 项目作为基线。
