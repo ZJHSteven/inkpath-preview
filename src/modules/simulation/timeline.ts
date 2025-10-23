@@ -133,13 +133,20 @@ export function buildSimulationTimeline(
   program: GCodeProgram,
   settings: SimulatorSettings,
 ): SimulationTimeline {
+  const { heightMm } = settings.paper
   const context: InterpreterContext = {
     absolute: true,
     unit: 'mm',
     feedRate: DEFAULT_FEED_MM_PER_MIN,
     toolhead: {
       x: 0,
-      y: 0,
+      /**
+       * 关键说明：
+       * - 内部仍以“左下角为原点”进行解析，与大部分 CNC G-code 约定保持一致；
+       * - 由于前端展示需要“左上角为原点”，我们将初始状态设为纸张最高点（heightMm），
+       *   这样在映射到左上角坐标系时即可得到 y=0，避免初始位置落在画布底部。
+       */
+      y: heightMm,
       z: 5,
       feedRate: DEFAULT_FEED_MM_PER_MIN,
     },
