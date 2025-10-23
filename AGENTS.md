@@ -5,6 +5,8 @@
 ## 2025-10-23
 
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。
+- 调整 `src/modules/simulation/timeline.ts`，在绝对坐标模式下将用户的 Y 值（左上角为零、向下为负）映射到内部坐标，并将初始笔尖定位到纸张左上角。
+- 更新 `src/modules/validation/simulationValidator.ts` 警告提示，说明新的 Y 轴取值区间为 `-height~0`，与教学坐标体系保持一致。
 - 通过 `git revert` 回滚 `src/modules/simulation/timeline.ts` 的坐标系改动，恢复最初实现以便定位坐标方向问题。
 
 ## 2025-10-12

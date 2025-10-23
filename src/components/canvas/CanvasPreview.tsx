@@ -108,12 +108,12 @@ export function CanvasPreview({
 
     /**
      * 画布坐标映射：
-     * - X 轴保持向右递增；
-     * - 按照需求改为左上角为原点，因此 Y 轴向下递增；
-     * - 统一通过 scale 映射到当前画布像素尺寸。
+     * - 时间线内部依旧使用“左下角为原点、Y 向上为正”的数学坐标；
+     * - 用户输入以左上角为基准、向下为负值，因此这里需要将内部 Y 翻转到屏幕坐标；
+     * - 统一通过 scale 映射到当前画布像素尺寸，保持实际比例不失真。
      */
     const mapX = (x: number) => offsetX + x * scale
-    const mapY = (y: number) => offsetY + y * scale
+    const mapY = (y: number) => offsetY + (paper.heightMm - y) * scale
 
     // 背景
     context.fillStyle = '#0b1220'

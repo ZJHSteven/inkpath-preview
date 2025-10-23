@@ -36,7 +36,7 @@ export function validateSimulationBounds(
     if (startOut || endOut) {
       issues.push({
         lineNumber: segment.lineNumber,
-        message: `运动路径超出纸张范围（X: 0~${widthMm}mm, Y: 0~${heightMm}mm），请检查坐标。`,
+        message: `运动路径超出纸张范围（X: 0~${widthMm}mm, Y: -${heightMm}~0mm，左上角为原点）。`,
         severity: 'warning',
         type: 'OUT_OF_BOUNDS',
       })

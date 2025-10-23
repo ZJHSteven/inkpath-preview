@@ -27,6 +27,8 @@ interface InterpreterContext {
   feedRate: number
   /** 最近一次的笔尖状态。 */
   toolhead: ToolheadState
+  /** 纸张高度（毫米），用于在绝对坐标模式下转换 Y 轴。 */
+  paperHeightMm: number
 }
 
 function cloneState(state: ToolheadState): ToolheadState {
@@ -38,6 +40,7 @@ function convertToMm(value: number, unit: 'mm' | 'inch'): number {
 }
 
 function updateAxis(
+  axis: 'X' | 'Y' | 'Z',
   axisValue: number | undefined,
   current: number,
   context: InterpreterContext,
@@ -47,7 +50,19 @@ function updateAxis(
   }
 
   const converted = convertToMm(axisValue, context.unit)
-  return context.absolute ? converted : current + converted
+  if (context.absolute) {
+    if (axis === 'Y') {
+      /**
+       * 绝对坐标模式：
+       * - 用户在 G-code 中以左上角为原点、向下为负值；
+       * - 内部仍沿用左下角为原点的计算方式，因此需要将值映射到 0~paperHeightMm；
+       * - 映射公式：paperHeightMm + converted（converted 为负值时等价于 paperHeight - |converted|）。
+       */
+      return context.paperHeightMm + converted
+    }
+    return converted
+  }
+  return current + converted
 }
 
 function resolveFeedRate(
@@ -116,16 +131,23 @@ export function buildSimulationTimeline(
   program: GCodeProgram,
   settings: SimulatorSettings,
 ): SimulationTimeline {
+  const paperHeightMm = settings.paper.heightMm
   const context: InterpreterContext = {
     absolute: true,
     unit: 'mm',
     feedRate: DEFAULT_FEED_MM_PER_MIN,
     toolhead: {
       x: 0,
-      y: 0,
+      /**
+       * 初始位置统一映射至纸张左上角：
+       * - 用户视角下 (0, 0) 位于左上角；
+       * - 内部坐标采用左下角为原点，因此初始 Y 为纸张高度。
+       */
+      y: paperHeightMm,
       z: 5,
       feedRate: DEFAULT_FEED_MM_PER_MIN,
     },
+    paperHeightMm,
   }
 
   const segments: SimulationSegment[] = []
@@ -157,9 +179,9 @@ export function buildSimulationTimeline(
 
     if (command.code === 'G0' || command.code === 'G00' || command.code === 'G1' || command.code === 'G01') {
       const nextState: ToolheadState = cloneState(context.toolhead)
-      nextState.x = updateAxis(command.args.X, nextState.x, context)
-      nextState.y = updateAxis(command.args.Y, nextState.y, context)
-      nextState.z = updateAxis(command.args.Z, nextState.z, context)
+      nextState.x = updateAxis('X', command.args.X, nextState.x, context)
+      nextState.y = updateAxis('Y', command.args.Y, nextState.y, context)
+      nextState.z = updateAxis('Z', command.args.Z, nextState.z, context)
 
       const isRapid = command.code === 'G0' || command.code === 'G00'
       const feedRate = resolveFeedRate(command, context, isRapid)
