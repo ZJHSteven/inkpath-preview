@@ -106,9 +106,14 @@ export function CanvasPreview({
     const offsetX = (canvasSize.width - paper.widthMm * scale) / 2
     const offsetY = (canvasSize.height - paper.heightMm * scale) / 2
 
+    /**
+     * 画布坐标映射：
+     * - X 轴保持向右递增；
+     * - 按照需求改为左上角为原点，因此 Y 轴向下递增；
+     * - 统一通过 scale 映射到当前画布像素尺寸。
+     */
     const mapX = (x: number) => offsetX + x * scale
-    const mapY = (y: number) =>
-      offsetY + (paper.heightMm - y) * scale
+    const mapY = (y: number) => offsetY + y * scale
 
     // 背景
     context.fillStyle = '#0b1220'

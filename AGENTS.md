@@ -2,6 +2,10 @@
 
 # 代理工作日志
 
+## 2025-10-23
+
+- 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。
+
 ## 2025-10-12
 
 - 引入 `lucide-react` 并改写 `src/components/icons/ControlIcons.tsx` 的齿轮图标实现，统一复用图标库以避免手绘 SVG 角度不规整。
