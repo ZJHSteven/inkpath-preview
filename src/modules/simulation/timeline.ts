@@ -33,23 +33,6 @@ function cloneState(state: ToolheadState): ToolheadState {
   return { ...state }
 }
 
-function mapStateToTopLeft(
-  state: ToolheadState,
-  settings: SimulatorSettings,
-): ToolheadState {
-  const { heightMm } = settings.paper
-  /**
-   * 教学说明：
-   * - 仿真内部仍沿用 CNC 常见的“左下角为原点、Y 轴向上”坐标系，便于解析相对运动；
-   * - 渲染层要求“左上角为原点、Y 轴向下”，因此在返回时间线数据前统一转换；
-   * - 仅在此处做映射可以保持数学运算简洁，同时避免各个调用方重复处理坐标翻转。
-   */
-  return {
-    ...state,
-    y: heightMm - state.y,
-  }
-}
-
 function convertToMm(value: number, unit: 'mm' | 'inch'): number {
   return unit === 'inch' ? value * MM_PER_INCH : value
 }
@@ -114,8 +97,8 @@ function createSegment(
     id: `${command.raw.lineNumber}-${cumulativeTimeMs + durationMs}`,
     lineNumber: command.raw.lineNumber,
     command,
-    start: mapStateToTopLeft(context.toolhead, settings),
-    end: mapStateToTopLeft(nextState, settings),
+    start: cloneState(context.toolhead),
+    end: cloneState(nextState),
     penDown: context.toolhead.z <= settings.penDownThreshold,
     durationMs,
     cumulativeTimeMs: cumulativeTimeMs + durationMs,
@@ -133,7 +116,6 @@ export function buildSimulationTimeline(
   program: GCodeProgram,
   settings: SimulatorSettings,
 ): SimulationTimeline {
-  const { heightMm } = settings.paper
   const context: InterpreterContext = {
     absolute: true,
     unit: 'mm',
@@ -141,12 +123,11 @@ export function buildSimulationTimeline(
     toolhead: {
       x: 0,
       /**
-       * 关键说明：
-       * - 内部仍以“左下角为原点”进行解析，与大部分 CNC G-code 约定保持一致；
-       * - 由于前端展示需要“左上角为原点”，我们将初始状态设为纸张最高点（heightMm），
-       *   这样在映射到左上角坐标系时即可得到 y=0，避免初始位置落在画布底部。
+       * 教学说明：
+       * - 解析阶段即采用“左上角为原点、Y 轴向下”的屏幕坐标系；
+       * - 默认从纸张左上角 (0, 0) 开始，便于初学者在 G-code 中直接以正向 Y 表示向下运动。
        */
-      y: heightMm,
+      y: 0,
       z: 5,
       feedRate: DEFAULT_FEED_MM_PER_MIN,
     },

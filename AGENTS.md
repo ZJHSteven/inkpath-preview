@@ -5,8 +5,7 @@
 ## 2025-10-23
 
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。
-- 在 `src/modules/simulation/timeline.ts` 增设坐标翻转映射，统一将内部 G-code 坐标转换为左上角原点，确保动画、边界校验与数据展示方向一致。
-- 再次修正 `src/modules/simulation/timeline.ts` 初始笔尖状态，将默认 Y 设为纸张高度，保证初始帧映射后落在左上角原点。
+- 重构 `src/modules/simulation/timeline.ts`，直接以左上角为原点生成时间线数据，移除额外翻转逻辑并统一默认笔尖坐标至 (0, 0)。
 
 ## 2025-10-12
 
