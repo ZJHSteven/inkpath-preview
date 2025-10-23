@@ -33,6 +33,23 @@ function cloneState(state: ToolheadState): ToolheadState {
   return { ...state }
 }
 
+function mapStateToTopLeft(
+  state: ToolheadState,
+  settings: SimulatorSettings,
+): ToolheadState {
+  const { heightMm } = settings.paper
+  /**
+   * 教学说明：
+   * - 仿真内部仍沿用 CNC 常见的“左下角为原点、Y 轴向上”坐标系，便于解析相对运动；
+   * - 渲染层要求“左上角为原点、Y 轴向下”，因此在返回时间线数据前统一转换；
+   * - 仅在此处做映射可以保持数学运算简洁，同时避免各个调用方重复处理坐标翻转。
+   */
+  return {
+    ...state,
+    y: heightMm - state.y,
+  }
+}
+
 function convertToMm(value: number, unit: 'mm' | 'inch'): number {
   return unit === 'inch' ? value * MM_PER_INCH : value
 }
@@ -97,8 +114,8 @@ function createSegment(
     id: `${command.raw.lineNumber}-${cumulativeTimeMs + durationMs}`,
     lineNumber: command.raw.lineNumber,
     command,
-    start: cloneState(context.toolhead),
-    end: cloneState(nextState),
+    start: mapStateToTopLeft(context.toolhead, settings),
+    end: mapStateToTopLeft(nextState, settings),
     penDown: context.toolhead.z <= settings.penDownThreshold,
     durationMs,
     cumulativeTimeMs: cumulativeTimeMs + durationMs,
