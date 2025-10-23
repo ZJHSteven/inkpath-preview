@@ -5,7 +5,6 @@
 ## 2025-10-23
 
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。
-- 在 `src/modules/simulation/timeline.ts` 增设坐标翻转映射，统一将内部 G-code 坐标转换为左上角原点，确保动画、边界校验与数据展示方向一致。
 
 ## 2025-10-12
 
