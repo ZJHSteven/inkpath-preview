@@ -17,4 +17,5 @@ export const DEFAULT_SIMULATOR_SETTINGS: SimulatorSettings = {
   penWidthMm: 0.5,
   penColor: '#1773cf',
   penDownThreshold: 0,
+  penDownDirection: 'negative',
 }

@@ -24,14 +24,18 @@ export function validateSimulationBounds(
 ): GCodeIssue[] {
   const issues: GCodeIssue[] = []
   const { widthMm, heightMm } = settings.paper
+  const minX = 0
+  const maxX = widthMm
+  const minY = -heightMm
+  const maxY = 0
 
   for (const segment of timeline.segments) {
     const startOut =
-      isOutOfBounds(segment.start.x, 0, widthMm) ||
-      isOutOfBounds(segment.start.y, 0, heightMm)
+      isOutOfBounds(segment.start.x, minX, maxX) ||
+      isOutOfBounds(segment.start.y, minY, maxY)
     const endOut =
-      isOutOfBounds(segment.end.x, 0, widthMm) ||
-      isOutOfBounds(segment.end.y, 0, heightMm)
+      isOutOfBounds(segment.end.x, minX, maxX) ||
+      isOutOfBounds(segment.end.y, minY, maxY)
 
     if (startOut || endOut) {
       issues.push({

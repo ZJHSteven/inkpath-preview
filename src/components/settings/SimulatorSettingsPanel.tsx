@@ -97,6 +97,14 @@ export function SimulatorSettingsPanel({
     })
   }
 
+  const handlePenDirectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const nextDirection = event.target.value === 'positive' ? 'positive' : 'negative'
+    onChange({
+      ...settings,
+      penDownDirection: nextDirection,
+    })
+  }
+
   const updateCustomPaper = (nextWidth: number, nextHeight: number) => {
     const safeWidth = Math.max(nextWidth, 10)
     const safeHeight = Math.max(nextHeight, 10)
@@ -201,6 +209,19 @@ export function SimulatorSettingsPanel({
           value={settings.penDownThreshold}
           onChange={handlePenThresholdChange}
         />
+      </label>
+      <label className="settings-panel__field">
+        <span>落笔方向</span>
+        <select
+          value={settings.penDownDirection}
+          onChange={handlePenDirectionChange}
+        >
+          <option value="negative">Z ≤ 阈值视为落笔（常见绘图仪）</option>
+          <option value="positive">Z ≥ 阈值视为落笔（自上而下坐标）</option>
+        </select>
+        <small className="settings-panel__hint">
+          若示例轨迹出现“反向落笔”，可在此切换比较方向。
+        </small>
       </label>
     </section>
   )

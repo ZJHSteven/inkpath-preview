@@ -124,13 +124,18 @@ export interface PaperSettings {
   label: string
 }
 
+/** 描述落笔方向的取值定义。 */
+export type PenDownDirection = 'negative' | 'positive'
+
 /** 用于响应式渲染的全局设定。 */
 export interface SimulatorSettings {
   paper: PaperSettings
   penWidthMm: number
   penColor: string
-  /** 判定落笔的 Z 阈值，Z 小于等于该值则视为落笔。 */
+  /** 判定落笔的 Z 阈值，结合 penDownDirection 决定比较方式。 */
   penDownThreshold: number
+  /** 判定落笔所依据的方向：negative 表示 Z 越小越接近纸面，positive 相反。 */
+  penDownDirection: PenDownDirection
 }
 
 /** 播放控制器当前的进度状态。 */
