@@ -5,6 +5,7 @@
 ## 2025-10-23
 
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。
+- 通过 `git revert` 回滚 `src/modules/simulation/timeline.ts` 的坐标系改动，恢复最初实现以便定位坐标方向问题。
 
 ## 2025-10-12
 
