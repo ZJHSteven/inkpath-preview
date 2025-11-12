@@ -2,6 +2,12 @@
 
 # 代理工作日志
 
+## 2025-11-12
+
+- 扩展 `src/modules/gcode/types.ts` 与 `parser.ts`，新增 G4/G04 暂停指令以及 P/S 参数解析，保证教材示例中的 “G4 P4” 能被识别为暂停 4 秒。
+- 在 `src/modules/simulation/timeline.ts` 引入 `createDwellSegment`，于构建时间线时把 G4 指令转为“静止但消耗时间”的段落，并用详尽注释解释为何要忽略单位换算直接使用秒。
+- 更新 `src/modules/simulation/config.ts` 默认参数，将落笔阈值改为 0.1mm、落笔方向改为“自上而下”（Z ≥ 阈值判定落笔），以贴合默认教学坐标系。
+
 ## 2025-10-23
 
 - 调整 `src/components/canvas/CanvasPreview.tsx` 的坐标映射函数，使纸张原点位于左上角，并补充教学注释说明缩放与坐标系取舍。

@@ -16,6 +16,6 @@ export const DEFAULT_SIMULATOR_SETTINGS: SimulatorSettings = {
   paper: PAPER_PRESETS[0],
   penWidthMm: 0.5,
   penColor: '#1773cf',
-  penDownThreshold: 0,
-  penDownDirection: 'negative',
+  penDownThreshold: 0.1,
+  penDownDirection: 'positive',
 }

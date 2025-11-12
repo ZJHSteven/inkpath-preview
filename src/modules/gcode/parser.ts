@@ -24,6 +24,8 @@ const SUPPORTED_CODES: SupportedCommand[] = [
   'G00',
   'G1',
   'G01',
+  'G4',
+  'G04',
   'G20',
   'G21',
   'G90',

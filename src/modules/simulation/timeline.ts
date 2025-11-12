@@ -128,6 +128,34 @@ function createSegment(
 }
 
 /**
+ * 将 G4/G04 暂停指令转换为“静止但消耗时间”的段落。
+ * 由于暂停期间笔尖不会位移，因此起止位置完全一致，但必须
+ * 记录 duration 才能驱动播放控制器正确累积时间。
+ */
+function createDwellSegment(
+  command: GCodeCommand,
+  context: InterpreterContext,
+  settings: SimulatorSettings,
+  cumulativeTimeMs: number,
+  dwellSeconds: number,
+): SimulationSegment {
+  const safeSeconds = Math.max(dwellSeconds, 0)
+  const durationMs = safeSeconds * 1000
+  const stationaryState = cloneState(context.toolhead)
+
+  return {
+    id: `${command.raw.lineNumber}-dwell-${cumulativeTimeMs + durationMs}`,
+    lineNumber: command.raw.lineNumber,
+    command,
+    start: cloneState(stationaryState),
+    end: cloneState(stationaryState),
+    penDown: isPenEngaged(stationaryState.z, settings),
+    durationMs,
+    cumulativeTimeMs: cumulativeTimeMs + durationMs,
+  }
+}
+
+/**
  * 根据 G-code 程序构建完整的时间线。
  */
 export function buildSimulationTimeline(
@@ -202,6 +230,30 @@ export function buildSimulationTimeline(
       }
 
       context.toolhead = cloneState(nextState)
+      continue
+    }
+
+    if (command.code === 'G4' || command.code === 'G04') {
+      /**
+       * G4/G04 的 P（或 S）参数表示暂停秒数。
+       * 这里直接按照秒换算为毫秒，忽略单位切换指令，
+       * 以匹配“G4 P4 即暂停 4 秒”的常见写法。
+       */
+      const dwellSeconds = command.args.P ?? command.args.S
+      if (dwellSeconds === undefined) {
+        continue
+      }
+      const dwellSegment = createDwellSegment(
+        command,
+        context,
+        settings,
+        cumulativeTimeMs,
+        dwellSeconds,
+      )
+      if (dwellSegment.durationMs > 0) {
+        cumulativeTimeMs = dwellSegment.cumulativeTimeMs
+        segments.push(dwellSegment)
+      }
       continue
     }
   }

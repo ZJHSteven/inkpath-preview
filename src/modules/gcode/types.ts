@@ -28,11 +28,22 @@ export type SettingCommand = 'G20' | 'G21' | 'G90' | 'G91'
 /** 支持解析的程序流程指令。 */
 export type ProgramCommand = 'M0' | 'M00' | 'M2' | 'M02'
 
-/** 统一的指令类型。未在集合里的命令将被判定为暂不支持。 */
-export type SupportedCommand = MotionCommand | SettingCommand | ProgramCommand
+/** 支持的暂停（驻留）指令，常用于 G-code 中的等待逻辑。 */
+export type DwellCommand = 'G4' | 'G04'
 
-/** 坐标轴或进给参数字段。 */
-export type NumericalField = 'X' | 'Y' | 'Z' | 'F'
+/** 统一的指令类型。未在集合里的命令将被判定为暂不支持。 */
+export type SupportedCommand =
+  | MotionCommand
+  | SettingCommand
+  | ProgramCommand
+  | DwellCommand
+
+/**
+ * 数值字段集合：
+ * - X/Y/Z/F 依旧表示空间坐标与进给速度；
+ * - P/S 则用于驻留指令的时间参数（单位：秒）。
+ */
+export type NumericalField = 'X' | 'Y' | 'Z' | 'F' | 'P' | 'S'
 
 /** 位置向量，缺失字段保持 undefined，便于区分“未在此行指定”。 */
 export type AxisPosition = Partial<Record<'X' | 'Y' | 'Z', number>>
