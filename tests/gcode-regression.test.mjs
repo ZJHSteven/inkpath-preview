@@ -11,6 +11,9 @@ import { createServer } from 'vite'
 
 const vite = await createServer({
   configFile: false,
+  // 单元测试只需 Vite 的 TS 加载能力，不需要扫描页面入口并预打包浏览器依赖。
+  // 关闭依赖发现可避免用例退出时，后台预扫描还未结束的无意义报错。
+  optimizeDeps: { noDiscovery: true, entries: [] },
   server: { middlewareMode: true },
   appType: 'custom',
 })
