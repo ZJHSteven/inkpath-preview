@@ -4,7 +4,8 @@
 - 现状：仓库 `D:\Workspace\Inkagination\inkpath-preview`，线上 `https://inkpath-preview.zjhstudio.com/`。
 - 已完成：查明 `G1 F...` 被 `validateMotionArguments` 错判；`###` 被 `parseLine` 判不支持；Monaco `revealLineInCenter` 可能在键入时抢滚动位置。
 - 已完成：解析器识别可配置整行 marker；F-only 指令通过语义校验并沿用既有模态速度计算；Monaco 不在普通编辑时自动强制滚动；设置面板加入 marker 输入。
-- 正在做：增加独立测试并校验浏览器交互。
+- 已完成：新增 7 项独立回归测试，覆盖 F-only/原始行号/默认及自定义 marker/英寸单位/暂停与异常输入。
+- 正在做：运行自动化测试并校验浏览器交互。
 - 下一步：本地测试、部署 Cloudflare Pages、生产回归验证。
 
 ## 关键决策与理由
