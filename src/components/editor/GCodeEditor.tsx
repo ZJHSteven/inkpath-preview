@@ -22,8 +22,6 @@ export interface GCodeEditorProps {
   issues: GCodeIssue[]
   /** 当前播放到的行号，便于高亮展示。 */
   activeLine?: number
-  /** 仅播放或手动点击错误位置时自动滚动；普通编辑绝不抢走视口。 */
-  followActiveLine: boolean
   /** 是否启用自动换行，用于配合菜单开关。 */
   wordWrapEnabled: boolean
 }
@@ -117,7 +115,6 @@ function useActiveLineDecoration(
   monacoRef: React.MutableRefObject<Monaco | null>,
   editorRef: React.MutableRefObject<editor.IStandaloneCodeEditor | null>,
   activeLine?: number,
-  followActiveLine = false,
 ) {
   const decorationRef = useRef<string[]>([])
 
@@ -144,11 +141,12 @@ function useActiveLineDecoration(
 
     // Monaco 的 revealLineInCenter 会直接改变滚动位置。
     // 当用户正在编辑并敲击 Enter 时，解析会刷新活动行号；如果每次都 reveal，
-    // 视口就被拽回首行。只有确实处于播放/人工定位模式、且编辑器没有输入焦点时才跟随。
-    if (activeLine && followActiveLine && !editorInstance.hasTextFocus()) {
+    // 视口就被拽回首行。仅在编辑器没有输入焦点时跟随：既保留播放、
+    // 手动拖动进度条和错误跳转时的定位，又不会打断正在键入的操作。
+    if (activeLine && !editorInstance.hasTextFocus()) {
       editorInstance.revealLineInCenter(activeLine)
     }
-  }, [activeLine, followActiveLine, editorRef, monacoRef])
+  }, [activeLine, editorRef, monacoRef])
 }
 
 export function GCodeEditor({
@@ -156,7 +154,6 @@ export function GCodeEditor({
   onChange,
   issues,
   activeLine,
-  followActiveLine,
   wordWrapEnabled,
 }: GCodeEditorProps) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -172,7 +169,7 @@ export function GCodeEditor({
   )
 
   useMarkers(monacoRef, editorRef, issues)
-  useActiveLineDecoration(monacoRef, editorRef, activeLine, followActiveLine)
+  useActiveLineDecoration(monacoRef, editorRef, activeLine)
 
   const options = useMemo<editor.IStandaloneEditorConstructionOptions>(
     () => ({

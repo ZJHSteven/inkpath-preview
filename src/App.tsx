@@ -162,7 +162,6 @@ function App() {
               onChange={setSource}
               issues={allIssues}
               activeLine={activeLine}
-              followActiveLine={controller.state.playing || manualFocusLine !== undefined}
               wordWrapEnabled={wordWrapEnabled}
             />
             <SimulatorSettingsPanel
