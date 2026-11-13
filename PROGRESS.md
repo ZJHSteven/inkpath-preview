@@ -1,5 +1,10 @@
 # InkPath Preview 项目状态快照
 
+## 2026-11-14 第二轮需求（进行中）
+- 目标：修复错误/警告过多后显示为黄色薄条；错误项始终可读可点击到编辑器目标行；暂停到某段轨迹后按钮一键插入当前可配置的 marker。
+- 已核对：ErrorPanel 列表 `max-height:220px; display:flex; flex-direction:column; overflow-y:auto`，其中每条 `li` 为默认可收缩项且 `overflow:hidden`；播放器暂没有插入按钮；错误跳转目前只通过 `activeLine` 间接请求滚动，同一条反复点击可能不触发。
+- 现阶段：复现、修复、测试及重新部署。
+
 ## 当前结论
 - 现状：仓库 `D:\Workspace\Inkagination\inkpath-preview`，线上 `https://inkpath-preview.zjhstudio.com/`。
 - 已完成：查明 `G1 F...` 被 `validateMotionArguments` 错判；`###` 被 `parseLine` 判不支持；Monaco `revealLineInCenter` 可能在键入时抢滚动位置。
