@@ -1,6 +1,9 @@
 # InkPath Preview 项目状态快照
 
-## 2026-11-14 第二轮需求（进行中）
+## 2026-11-14 第二轮需求（已完成、生产验收通过）
+- 本轮最终功能版 `7ff86b40113837566580cecf634a06f9f70c7a68` 已推送 `master`；Cloudflare Pages deployment `fac868c4-a2ba-4bdf-9565-cf86e0572783` 所有阶段成功。正式域名加载 JS `index-Dvo5FV-v.js` 与 CSS `index-D0CLxyws.css`。
+- 正式站复测：45 条警告的首末卡片高度均 85.19px、滚动区域 220px，点击第 48 行跳到 Monaco 可见行 32–48 并获得输入焦点。播放拖动至 65.7%，点击插入按钮在第 6 行后加入 `###`，进度仍 65.7%、错误 0。重复插入不重复（本地复测），播放时按钮禁用。本地 12/12 测试、lint、build 成功；移动宽度模拟下未出现页面水平溢出。
+- 已关闭本地 Vite（4317），保留日常 Chrome 正式站的测试标签页。无需改动设备或发送任何实际指令。
 - 目标：修复错误/警告过多后显示为黄色薄条；错误项始终可读可点击到编辑器目标行；暂停到某段轨迹后按钮一键插入当前可配置的 marker。
 - 已核对：ErrorPanel 列表 `max-height:220px; display:flex; flex-direction:column; overflow-y:auto`，其中每条 `li` 为默认可收缩项且 `overflow:hidden`；播放器暂没有插入按钮；错误跳转目前只通过 `activeLine` 间接请求滚动，同一条反复点击可能不触发。
 - 现阶段：复现、修复、测试及重新部署。
