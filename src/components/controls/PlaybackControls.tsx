@@ -13,6 +13,7 @@ import type {
 
 import './PlaybackControls.css'
 import { PauseIcon, PlayIcon, StopIcon } from '../icons/ControlIcons'
+import { BookmarkPlus } from 'lucide-react'
 
 export interface PlaybackControlsProps {
   state: PlaybackState
@@ -23,6 +24,10 @@ export interface PlaybackControlsProps {
   onStop: () => void
   onSeek: (ratio: number) => void
   onSpeedChange: (speed: number) => void
+  /** 在当前运动段后插入整行 Marker；由父组件计算真实 G-code 行号。 */
+  onInsertMarker: () => void
+  canInsertMarker: boolean
+  markerLineHint?: number
 }
 
 function formatTime(ms: number): string {
@@ -42,6 +47,9 @@ export function PlaybackControls({
   onStop,
   onSeek,
   onSpeedChange,
+  onInsertMarker,
+  canInsertMarker,
+  markerLineHint,
 }: PlaybackControlsProps) {
   const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
     onSeek(Number(event.target.value))
@@ -76,6 +84,21 @@ export function PlaybackControls({
         >
           <StopIcon />
           <span className="playback-controls__sr-only">停止播放</span>
+        </button>
+        <button
+          type="button"
+          className="playback-controls__button playback-controls__marker-button"
+          onClick={onInsertMarker}
+          disabled={state.playing || !playable || !canInsertMarker}
+          aria-label="在当前位置插入 Marker"
+          title={
+            markerLineHint === undefined
+              ? '请先加载可播放的轨迹，并设置非空 Marker'
+              : `暂停后在第 ${markerLineHint} 行之后插入 Marker（不会切分正在执行的运动指令）`
+          }
+        >
+          <BookmarkPlus size={17} aria-hidden="true" />
+          <span>插入 Marker</span>
         </button>
       </div>
 

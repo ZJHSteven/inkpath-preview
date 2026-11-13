@@ -16,6 +16,7 @@ export interface EditorPanelProps {
   onChange: (next: string) => void
   issues: GCodeIssue[]
   activeLine?: number
+  navigationRequest?: { lineNumber: number; token: number }
   wordWrapEnabled: boolean
 }
 
@@ -24,6 +25,7 @@ export function EditorPanel({
   onChange,
   issues,
   activeLine,
+  navigationRequest,
   wordWrapEnabled,
 }: EditorPanelProps) {
   return (
@@ -42,6 +44,7 @@ export function EditorPanel({
           onChange={onChange}
           issues={issues}
           activeLine={activeLine}
+          navigationRequest={navigationRequest}
           wordWrapEnabled={wordWrapEnabled}
         />
       </div>

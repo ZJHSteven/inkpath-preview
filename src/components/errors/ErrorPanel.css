@@ -43,6 +43,9 @@
   gap: 8px;
   max-height: 220px;
   overflow-y: auto;
+  /* 容器负责滚动，而不是在高度不够时挤扁内部警告卡片。 */
+  min-height: 0;
+  overscroll-behavior: contain;
 }
 
 /* 使用 @supports 避免在不支持的浏览器中触发兼容性警告，同时在支持时保持细滚动条。 */
@@ -55,6 +58,12 @@
 .error-panel__item {
   border-radius: 10px;
   overflow: hidden;
+  /*
+   * 关键修复：默认 flex-shrink:1 会把 40+ 条警告压缩成高度 0 的彩色细条。
+   * 每个条目保留完整内容高度，列表超过 220px 时整体滚动。
+   */
+  flex: 0 0 auto;
+  min-height: min-content;
 }
 
 .error-panel__item-button {
@@ -72,6 +81,11 @@
 
 .error-panel__item-button:hover {
   background: rgba(59, 130, 246, 0.12);
+}
+
+.error-panel__item-button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: -2px;
 }
 
 .error-panel__item--error .error-panel__item-button {

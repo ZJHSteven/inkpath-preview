@@ -22,6 +22,8 @@ export interface GCodeEditorProps {
   issues: GCodeIssue[]
   /** 当前播放到的行号，便于高亮展示。 */
   activeLine?: number
+  /** 明确的用户跳转请求；即使连续点击同一行，token 改变后也重新执行。 */
+  navigationRequest?: { lineNumber: number; token: number }
   /** 是否启用自动换行，用于配合菜单开关。 */
   wordWrapEnabled: boolean
 }
@@ -149,11 +151,37 @@ function useActiveLineDecoration(
   }, [activeLine, editorRef, monacoRef])
 }
 
+/**
+ * 错误列表点击时，不应仅依赖 activeLine 的变化来滚动：
+ * - 多次点击同一错误时，activeLine 可能不变；
+ * - 错误所在行可能没有运动段，播放时间线没有对应的 seek 位置。
+ * 使用独立的 token 显式定位并设置光标，确保两种情况都可以导航。
+ */
+function useExplicitNavigation(
+  editorRef: React.MutableRefObject<editor.IStandaloneCodeEditor | null>,
+  navigationRequest?: { lineNumber: number; token: number },
+) {
+  useEffect(() => {
+    const editorInstance = editorRef.current
+    const model = editorInstance?.getModel()
+    if (!editorInstance || !model || !navigationRequest) return
+
+    const lineNumber = Math.max(
+      1,
+      Math.min(navigationRequest.lineNumber, model.getLineCount()),
+    )
+    editorInstance.setPosition({ lineNumber, column: 1 })
+    editorInstance.revealLineInCenter(lineNumber)
+    editorInstance.focus()
+  }, [navigationRequest, editorRef])
+}
+
 export function GCodeEditor({
   value,
   onChange,
   issues,
   activeLine,
+  navigationRequest,
   wordWrapEnabled,
 }: GCodeEditorProps) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -170,6 +198,7 @@ export function GCodeEditor({
 
   useMarkers(monacoRef, editorRef, issues)
   useActiveLineDecoration(monacoRef, editorRef, activeLine)
+  useExplicitNavigation(editorRef, navigationRequest)
 
   const options = useMemo<editor.IStandaloneEditorConstructionOptions>(
     () => ({
