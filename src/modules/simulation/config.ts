@@ -4,6 +4,7 @@
  *  定义仿真所需的默认配置与纸张预设，供参数面板与引擎共用。
  */
 
+import { DEFAULT_GCODE_MARKER } from '../gcode/types'
 import type { PaperSettings, SimulatorSettings } from '../gcode/types'
 
 export const PAPER_PRESETS: PaperSettings[] = [
@@ -14,6 +15,7 @@ export const PAPER_PRESETS: PaperSettings[] = [
 
 export const DEFAULT_SIMULATOR_SETTINGS: SimulatorSettings = {
   paper: PAPER_PRESETS[0],
+  separatorMarker: DEFAULT_GCODE_MARKER,
   penWidthMm: 0.5,
   penColor: '#1773cf',
   penDownThreshold: 0.1,

@@ -6,6 +6,7 @@
  *  不在此阶段做复杂的业务判断。
  */
 
+import { DEFAULT_GCODE_MARKER } from './types'
 import type {
   GCodeCommand,
   GCodeIssue,
@@ -123,16 +124,27 @@ function parseLine(raw: RawLine): GCodeCommand | null {
 /**
  * 将整段文本解析为 G-code 程序结构。
  */
-export function parseGCode(source: string): GCodeProgram {
+export function parseGCode(
+  source: string,
+  separatorMarker: string = DEFAULT_GCODE_MARKER,
+): GCodeProgram {
   const lines = source.replace(/\r\n/g, '\n').split('\n')
   const commands: GCodeCommand[] = []
   const issues: GCodeIssue[] = []
 
   let unit: LengthUnit = DEFAULT_UNIT
   let absolute = true
+  // 前后空白仅用于识别：不修改源代码，也不改变导出的 marker 内容。
+  // 空分隔符意味着禁用该功能，避免把空行误判成分隔标记。
+  const normalizedMarker = separatorMarker.trim()
 
   for (let index = 0; index < lines.length; index += 1) {
     const raw = extractRawLine(lines[index], index)
+    // InkPath 的“###”等 marker 是整行分隔符，不属于 G-code。
+    // 在转为指令前跳过，但仍保留原文本行号，便于后续报错定位。
+    if (normalizedMarker && raw.content === normalizedMarker) {
+      continue
+    }
     const command = parseLine(raw)
 
     if (!command) {

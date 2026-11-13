@@ -9,6 +9,12 @@
 /** G-code 使用的长度单位。 */
 export type LengthUnit = 'mm' | 'inch'
 
+/**
+ * 非标准 G-code 扩展：InkPath 后处理流水线用整行分隔符标记作业边界。
+ * 注意它不是运动指令，预览器只识别并跳过它，不会将其转换为设备命令。
+ */
+export const DEFAULT_GCODE_MARKER = '###'
+
 /** 记录单行代码的原始文本与附带的注释。 */
 export interface RawLine {
   /** 从 1 开始的行号，方便与编辑器高亮同步。 */
@@ -141,6 +147,8 @@ export type PenDownDirection = 'negative' | 'positive'
 /** 用于响应式渲染的全局设定。 */
 export interface SimulatorSettings {
   paper: PaperSettings
+  /** 可配置的整行作业分隔符；空字符串表示不启用分隔标记。 */
+  separatorMarker: string
   penWidthMm: number
   penColor: string
   /** 判定落笔的 Z 阈值，结合 penDownDirection 决定比较方式。 */

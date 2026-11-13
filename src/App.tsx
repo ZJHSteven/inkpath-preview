@@ -22,9 +22,9 @@ import { TopBar } from './components/layout/TopBar'
 import './App.css' // 引入应用级样式，包含模态层与隐藏文件输入的无障碍写法。
 
 function App() {
-  const { source, setSource, program, issues: documentIssues } =
-    useGCodeDocument()
   const [settings, setSettings] = useState(DEFAULT_SIMULATOR_SETTINGS)
+  const { source, setSource, program, issues: documentIssues } =
+    useGCodeDocument({ separatorMarker: settings.separatorMarker })
   const [manualFocusLine, setManualFocusLine] = useState<number | undefined>()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [wordWrapEnabled, setWordWrapEnabled] = useState(true)
@@ -162,6 +162,7 @@ function App() {
               onChange={setSource}
               issues={allIssues}
               activeLine={activeLine}
+              followActiveLine={controller.state.playing || manualFocusLine !== undefined}
               wordWrapEnabled={wordWrapEnabled}
             />
             <SimulatorSettingsPanel

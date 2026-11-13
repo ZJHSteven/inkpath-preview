@@ -9,12 +9,15 @@ import { useMemo, useState } from 'react'
 
 import { parseGCode } from '../modules/gcode/parser'
 import { DEFAULT_GCODE_SAMPLE } from '../modules/gcode/samples'
+import { DEFAULT_GCODE_MARKER } from '../modules/gcode/types'
 import type { GCodeIssue, GCodeProgram } from '../modules/gcode/types'
 import { validateProgram } from '../modules/validation/gcodeValidator'
 
 export interface UseGCodeDocumentOptions {
   /** 初始化编辑器时的默认文本。 */
   initialValue?: string
+  /** 解析时识别的整行作业标记；可随设置项动态调整。 */
+  separatorMarker?: string
 }
 
 export interface UseGCodeDocumentResult {
@@ -34,11 +37,14 @@ export interface UseGCodeDocumentResult {
 export function useGCodeDocument(
   options: UseGCodeDocumentOptions = {},
 ): UseGCodeDocumentResult {
-  const { initialValue = DEFAULT_GCODE_SAMPLE } = options
+  const {
+    initialValue = DEFAULT_GCODE_SAMPLE,
+    separatorMarker = DEFAULT_GCODE_MARKER,
+  } = options
   const [source, setSource] = useState(initialValue)
 
   const analysis = useMemo(() => {
-    const program = parseGCode(source)
+    const program = parseGCode(source, separatorMarker)
     const extraIssues = validateProgram(program)
     const issues = [...program.issues, ...extraIssues]
 
@@ -46,7 +52,7 @@ export function useGCodeDocument(
       program,
       issues,
     }
-  }, [source])
+  }, [source, separatorMarker])
 
   return {
     source,

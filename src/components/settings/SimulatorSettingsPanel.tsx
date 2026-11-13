@@ -89,6 +89,14 @@ export function SimulatorSettingsPanel({
     })
   }
 
+  /** 分隔符只能是一行文本；用户清空输入时就禁用标记识别。 */
+  const handleMarkerChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange({
+      ...settings,
+      separatorMarker: event.target.value.replace(/[\r\n]/g, ''),
+    })
+  }
+
   const handlePenThresholdChange = (event: ChangeEvent<HTMLInputElement>) => {
     const nextThreshold = handleNumberInput(event, settings.penDownThreshold)
     onChange({
@@ -134,6 +142,20 @@ export function SimulatorSettingsPanel({
       <p className="settings-panel__description">
         这里的参数会直接影响轨迹绘制与越界校验，请根据真实设备进行调整。
       </p>
+      <label className="settings-panel__field">
+        <span>G-code 作业分隔标记（Marker）</span>
+        <input
+          type="text"
+          value={settings.separatorMarker}
+          onChange={handleMarkerChange}
+          placeholder="###"
+          aria-label="G-code 作业分隔标记"
+          spellCheck={false}
+        />
+        <small className="settings-panel__hint">
+          单独成行时会跳过解析、不产生轨迹；下载仍保留原文。默认 ###，可修改或清空以禁用。
+        </small>
+      </label>
       <label className="settings-panel__field">
         <span>纸张尺寸</span>
         <select

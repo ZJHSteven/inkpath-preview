@@ -10,7 +10,9 @@ import type { GCodeIssue, GCodeProgram } from '../gcode/types'
 const MOTION_COMMANDS = new Set(['G0', 'G00', 'G1', 'G01'])
 
 /**
- * 校验运动指令是否具备必要的坐标信息。
+ * 校验运动指令是否有实际含义。
+ * `G1 F1000` 仅设置后续线性运动的进给速度，是合法且常见的用法。
+ * 这种行不会让笔尖移动，因此不需要 X/Y/Z；但完全没有参数的 G1 仍提示错误。
  */
 function validateMotionArguments(program: GCodeProgram): GCodeIssue[] {
   const issues: GCodeIssue[] = []
@@ -25,10 +27,10 @@ function validateMotionArguments(program: GCodeProgram): GCodeIssue[] {
       command.args.Y !== undefined ||
       command.args.Z !== undefined
 
-    if (!hasAxis) {
+    if (!hasAxis && command.args.F === undefined) {
       issues.push({
         lineNumber: command.raw.lineNumber,
-        message: '运动指令缺少坐标参数 (X/Y/Z)，无法模拟移动。',
+        message: '运动指令缺少坐标参数 (X/Y/Z) 或进给速度 (F)，无法模拟。',
         severity: 'error',
         type: 'MISSING_PARAMETER',
       })
