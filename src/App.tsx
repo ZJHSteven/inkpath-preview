@@ -64,6 +64,7 @@ function App() {
   )
 
   const controller = useSimulationController(timeline)
+  const seekAfterMarkerInsertion = controller.seek
 
   useEffect(() => {
     // 文本变化会触发仿真 Hook 自动重置（适用于一般编辑）。
@@ -71,8 +72,8 @@ function App() {
     const pending = restoreProgressRef.current
     if (pending?.source !== source) return
     restoreProgressRef.current = null
-    controller.seek(pending.ratio)
-  }, [source, controller.seek])
+    seekAfterMarkerInsertion(pending.ratio)
+  }, [source, seekAfterMarkerInsertion])
 
   useEffect(() => {
     if (controller.state.playing) {

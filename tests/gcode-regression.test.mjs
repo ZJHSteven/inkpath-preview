@@ -26,6 +26,8 @@ const { parseGCode } = await vite.ssrLoadModule('/src/modules/gcode/parser.ts')
 const { validateProgram } = await vite.ssrLoadModule('/src/modules/validation/gcodeValidator.ts')
 const { buildSimulationTimeline } = await vite.ssrLoadModule('/src/modules/simulation/timeline.ts')
 const { DEFAULT_SIMULATOR_SETTINGS } = await vite.ssrLoadModule('/src/modules/simulation/config.ts')
+const { insertMarkerAfterLine, getMarkerInsertionAfterLine } =
+  await vite.ssrLoadModule('/src/modules/gcode/markerInsert.ts')
 
 /** 模拟文档 Hook 中的“解析 + 校验”流程，断言真实播放门槛使用的错误集合。 */
 function analyze(source, marker) {
@@ -94,4 +96,49 @@ test('英寸模式下 F-only 正确换算，且暂停 G4 不受 marker 干扰', 
   assert.equal(timeline.segments[0].end.feedRate, 254)
   assert.ok(Math.abs(timeline.segments[0].durationMs - 6000) < 1e-6)
   assert.equal(timeline.segments[1].durationMs, 2000)
+})
+
+test('插入 Marker 保持运动指令内容完整及正确的物理行号', () => {
+  const before = 'G21\nG90\nG1 X10 Y-10\nG1 X20 Y-20'
+  const result = insertMarkerAfterLine(before, '###', 3)
+  assert.deepEqual(result, {
+    source: 'G21\nG90\nG1 X10 Y-10\n###\nG1 X20 Y-20',
+    markerLine: 4,
+    changed: true,
+  })
+  assert.deepEqual(analyze(result.source).issues, [])
+})
+
+test('同一段重复点击插入不生成重复 marker；可使用自定义 marker', () => {
+  const first = insertMarkerAfterLine('G1 X1\nG1 X2', '--STOP--', 1)
+  assert.ok(first?.changed)
+  const second = insertMarkerAfterLine(first.source, '--STOP--', 1)
+  assert.deepEqual(second, { ...first, changed: false })
+  assert.deepEqual(analyze(second.source, '--STOP--').issues, [])
+})
+
+test('插入 marker 保留 CRLF、文末换行、开头插入与无换行的单行文档', () => {
+  assert.equal(insertMarkerAfterLine('G21\r\nG1 X1\r\n', '###', 2)?.source, 'G21\r\nG1 X1\r\n###\r\n')
+  assert.equal(insertMarkerAfterLine('G1 X1', '###', 1)?.source, 'G1 X1\n###')
+  assert.equal(insertMarkerAfterLine('G1 X1', '###', 0)?.source, '###\nG1 X1')
+})
+
+test('拒绝无效 Marker、非整数行号、越界行号及空白 marker', () => {
+  assert.equal(insertMarkerAfterLine('G1 X1', '', 1), null)
+  assert.equal(insertMarkerAfterLine('G1 X1', ' \n ', 1), null)
+  assert.equal(insertMarkerAfterLine('G1 X1', '###', -1), null)
+  assert.equal(insertMarkerAfterLine('G1 X1', '###', 3), null)
+  assert.equal(insertMarkerAfterLine('G1 X1', '###', 0.5), null)
+})
+
+test('从暂停进度定位运动段末尾；起始位置在首条运动前，结束位置在末段后', () => {
+  const program = analyze('G21\nG90\nG1 F600\nG1 X10 Y-10\nG1 X20 Y-20').program
+  const t = buildSimulationTimeline(program, DEFAULT_SIMULATOR_SETTINGS)
+  assert.equal(getMarkerInsertionAfterLine(t, 0), 3)
+  assert.equal(getMarkerInsertionAfterLine(t, t.segments[0].cumulativeTimeMs / 2), 4)
+  assert.equal(getMarkerInsertionAfterLine(t, t.segments[0].cumulativeTimeMs), 4)
+  assert.equal(getMarkerInsertionAfterLine(t, t.totalDurationMs * 0.99), 5)
+  assert.equal(getMarkerInsertionAfterLine(t, t.totalDurationMs), 5)
+  assert.equal(getMarkerInsertionAfterLine(t, Number.NaN), null)
+  assert.equal(getMarkerInsertionAfterLine({ segments: [], totalDurationMs: 0 }, 0), null)
 })

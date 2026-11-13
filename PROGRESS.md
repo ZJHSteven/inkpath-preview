@@ -7,6 +7,7 @@
 - 已实测正式站：45 条越界警告时列表 clientHeight=220、第一条 li 高度=0 但 scrollHeight=85，直接坐实 Flex 子项被挤成零高度，而不是解析出错。
 - 已实现：`li flex:0 0 auto` 和列表滚动；错误行跳转独立 token 请求；播放区新增“插入 Marker”按钮及纯文本插入工具（保留行尾换行并防重复）。
 - 已完成 App 接线：暂停段定位到当前完整 G-code 行之后；`t=0` 在第一条运动之前；插入只增添整行、光标跳转到 marker 行，播放时间线重解析后恢复原暂停进度；禁用播放中/无轨迹/有阻断错误/marker 为空时的插入操作。
+- 已增加 5 项 Marker 纯逻辑回归测试，覆盖边界/重复插入/CRLF 与精确时间段。修正 React Hook 依赖警告，接下来进行实际 UI 验收。
 
 ## 当前结论
 - 现状：仓库 `D:\Workspace\Inkagination\inkpath-preview`，线上 `https://inkpath-preview.zjhstudio.com/`。
