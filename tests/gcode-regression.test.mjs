@@ -107,6 +107,12 @@ test('插入 Marker 保持运动指令内容完整及正确的物理行号', () 
     changed: true,
   })
   assert.deepEqual(analyze(result.source).issues, [])
+  // 插入的只是文本分隔符：轨迹数量、各段速度和整体时长都必须保持一致。
+  const originalTimeline = buildSimulationTimeline(analyze(before).program, DEFAULT_SIMULATOR_SETTINGS)
+  const markedTimeline = buildSimulationTimeline(analyze(result.source).program, DEFAULT_SIMULATOR_SETTINGS)
+  assert.equal(markedTimeline.segments.length, originalTimeline.segments.length)
+  assert.equal(markedTimeline.totalDurationMs, originalTimeline.totalDurationMs)
+  assert.deepEqual(markedTimeline.segments.map(s => s.end), originalTimeline.segments.map(s => s.end))
 })
 
 test('同一段重复点击插入不生成重复 marker；可使用自定义 marker', () => {
